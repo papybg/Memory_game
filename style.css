@@ -1,3 +1,5 @@
+/* style.css */
+
 /* 🌟 Основни стилове и CSS променливи */
 :root {
     --primary-color: #007bff; /* Основен син цвят */
@@ -30,15 +32,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; 
-  padding-top: 2rem; 
+  justify-content: flex-start;
+  padding-top: 2rem;
   min-height: 100vh;
   box-sizing: border-box;
 }
 
 /* 🌟 Стилове за заглавието на играта (#gameTitle) */
 #gameTitle {
-  font-size: 3.2rem;
+  font-size: 6.5rem;
   font-weight: bold;
   line-height: 1;
   margin: 0.8rem 0;
@@ -46,20 +48,23 @@ body {
   text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
   transition: all 0.5s ease-out;
 }
-
+/* НОВ СТИЛ за дълги заглавия */
 #gameTitle.title-long {
-    font-size: 2.5rem;
+    font-size: 5rem;
 }
+
 
 #gameMessage {
     margin-bottom: 10px;
     font-size: 1.2rem;
     font-weight: bold;
     min-height: 1.5em;
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out;
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    color: var(--primary-color);
 }
 
+/* Подобрена логика за съобщенията без !important */
 .message-hidden {
     opacity: 0;
     transform: scale(0.8);
@@ -67,6 +72,7 @@ body {
 .message-animate {
     opacity: 1;
     transform: scale(1);
+    font-size: 2.5rem;
 }
 
 .message-success {
@@ -128,6 +134,15 @@ button:disabled {
     box-sizing: border-box;
 }
 
+.game-section h2 {
+    font-size: 1.5rem;
+    color: var(--text-color-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color-light);
+}
+
 #gamePics {
   display: flex;
   justify-content: center;
@@ -141,38 +156,29 @@ button:disabled {
   min-height: 180px;
 }
 
-/* --- НОВИ И АКТУАЛИЗИРАНИ СТИЛОВЕ ЗА КАРТИТЕ С АНИМАЦИЯ --- */
-.game-card {
-    position: relative;
-    width: 180px;
-    height: 180px;
-    cursor: pointer;
+#gamePics img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  /* <<< ПРОМЯНА: Добавяме 'opacity' към transition, за да анимираме прозрачността */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 1.5s ease-in-out;
 }
 
-.game-card .card-image,
-.game-card .card-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border: 2px solid var(--border-color-dark);
-    border-radius: 10px;
-    background-color: #fff;
-    /* Указваме, че промяната на 'opacity' трябва да е плавна и да отнеме 1.5с */
-    transition: opacity 1.5s ease-in-out;
+#gamePics img:hover,
+#gamePics img:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  outline: none;
 }
 
-.is-visible {
-    opacity: 1;
-}
-
-.is-hidden {
+/* <<< ПРОМЯНА: Нов клас, който прави картинката прозрачна */
+.fading-out {
     opacity: 0;
-    pointer-events: none;
 }
-/* ---------------------------------------------------- */
 
 #allPics {
   display: flex;
@@ -189,17 +195,20 @@ button:disabled {
   width: 120px;
   height: 120px;
   object-fit: contain;
+  object-position: center;
   cursor: pointer;
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-#allPics img:hover {
+#allPics img:hover,
+#allPics img:focus {
   transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  outline: none;
 }
 
-/* 🌟 Стилове за контейнера с опции */
 #optionsContainer {
     display: flex;
     flex-direction: column;
@@ -238,40 +247,8 @@ button:disabled {
     padding-bottom: 10px;
 }
 
-/* 🌟 Цветове за текстовите редове в опциите */
 .option-line-1 {
     color: red;
 }
 .option-line-2 {
     color: blue;
-}
-#startGameBtn.option-line-3 {
-    color: black;
-    font-weight: bold;
-    background-color: var(--primary-color);
-}
-
-#themeOptions label, #countOptions label {
-    display: inline-block;
-    margin-right: 15px;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-.disabled-theme {
-    color: #999;
-    cursor: not-allowed;
-}
-
-#themeOptions .theme-animals {
-    color: brown;
-    font-weight: bold;
-}
-
-#themeOptions .theme-flowers {
-    color: green;
-    font-weight: bold;
-}
-
-.hidden {
-    display
