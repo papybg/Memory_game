@@ -75,15 +75,23 @@ body {
     border: none;
     padding: 0;
     margin: 0;
+    text-align: center;
 }
 
 #optionsContainer legend {
     font-weight: bold;
     font-size: 1.2em;
     padding: 0;
-    margin-bottom: 10px;
-    width: 100%;
-    text-align: left;
+    margin: 0 auto 10px auto;
+}
+
+.option-line-1 { color: red; }
+.option-line-2 { color: blue; }
+
+#themeOptions label, #countOptions label {
+    display: inline-block;
+    margin: 0 10px 5px 0;
+    cursor: pointer;
 }
 
 .disabled-theme {
@@ -192,11 +200,13 @@ button:disabled {
 
 /* Медийни заявки за адаптивност */
 @media (max-width: 768px) {
+    #gameTitle { font-size: 2.8rem; }
     .game-card { width: 150px; height: 150px; }
     #allPics img { width: 100px; height: 100px; }
 }
 
 @media (max-width: 480px) {
+    #gameTitle { font-size: 2.5rem; }
     .game-card { width: 90px; height: 90px; }
     #allPics img { width: 70px; height: 70px; }
     #gamePics, #allPics { gap: 10px; }
