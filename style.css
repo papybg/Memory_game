@@ -1,33 +1,152 @@
+/* 🌟 Основни стилове и CSS променливи */
+:root {
+    --primary-color: #007bff; /* Основен син цвят */
+    --primary-hover-focus-color: #0056b3; /* Цвят при ховър/фокус */
+    --background-light: #f5f5f5;
+    --background-game-section-1: #e0f7fa; /* Светъл син за горна секция */
+    --background-game-section-2: #f0f4c3; /* Светъл зелен за долна секция */
+    --border-color-dark: #555;
+    --border-color-light: #ccc;
+    --border-color-primary: #007bff;
+    --dashed-border-color: #aed581;
+    --disabled-button-color: #ccc;
+    --text-color-dark: #333;
+
+    /* Нови променливи за съобщенията */
+    --success-color: #28a745; /* Зелен за успех */
+    --error-color: #dc3545;   /* Червен за грешка */
+}
+
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--background-light);
+  background-image: url('images/fon1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  padding-top: 2rem; 
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
+/* 🌟 Стилове за заглавието на играта (#gameTitle) */
+#gameTitle {
+  font-size: 3.2rem;
+  font-weight: bold;
+  line-height: 1;
+  margin: 0.8rem 0;
+  color: #fff;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+  transition: all 0.5s ease-out;
 }
 
-#game-pics-container {
-    border-color: #007bff;
-    min-height: 120px; /* Осигурява място, докато се заредят картите */
+#gameTitle.title-long {
+    font-size: 2.5rem;
 }
 
-#all-pics-container {
-    border-color: #28a745;
+#gameMessage {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 1.5em;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
-/* --- НОВИ СТИЛОВЕ ЗА КАРТАТА И АНИМАЦИЯТА --- */
+.message-hidden {
+    opacity: 0;
+    transform: scale(0.8);
+}
+.message-animate {
+    opacity: 1;
+    transform: scale(1);
+}
 
+.message-success {
+    color: var(--success-color);
+}
+
+.message-error {
+    color: var(--error-color);
+}
+
+#controls {
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: black;
+  font-weight: bold;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--primary-hover-focus-color);
+}
+
+button:focus {
+    background-color: var(--primary-hover-focus-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+button:disabled {
+  background-color: var(--disabled-button-color);
+  cursor: not-allowed;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 10px auto;
+}
+
+.game-section {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+#gamePics {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: var(--background-game-section-1);
+  border: 2px solid var(--border-color-primary);
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 180px;
+}
+
+/* --- НОВИ И АКТУАЛИЗИРАНИ СТИЛОВЕ ЗА КАРТИТЕ С АНИМАЦИЯ --- */
 .game-card {
-    position: relative; /* Задължително за позициониране на слоевете */
-    width: 100px;
-    height: 100px;
-    margin: 10px;
+    position: relative;
+    width: 180px;
+    height: 180px;
+    cursor: pointer;
 }
 
 .game-card .card-image,
@@ -37,34 +156,122 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid black;
     object-fit: contain;
+    border: 2px solid var(--border-color-dark);
+    border-radius: 10px;
+    background-color: #fff;
     /* Указваме, че промяната на 'opacity' трябва да е плавна и да отнеме 1.5с */
     transition: opacity 1.5s ease-in-out;
 }
 
-/* Класове за контрол на видимостта */
 .is-visible {
     opacity: 1;
 }
 
 .is-hidden {
     opacity: 0;
-    pointer-events: none; /* Да не може да се клика на невидимия слой */
+    pointer-events: none;
+}
+/* ---------------------------------------------------- */
+
+#allPics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--background-game-section-2);
+  border: 2px dashed var(--dashed-border-color);
+  border-radius: 10px;
+  padding: 15px;
 }
 
-/* ------------------------------------------- */
+#allPics img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
 
-#all-pics-container img {
-    width: 80px;
-    height: 80px;
-    margin: 5px;
+#allPics img:hover {
+  transform: scale(1.05);
+}
+
+/* 🌟 Стилове за контейнера с опции */
+#optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 1rem auto;
+    font-size: 1.1rem;
+    padding: 25px;
+    border: 1px solid var(--border-color-light);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+}
+
+#optionsContainer fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#optionsContainer legend {
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+#optionsContainer h2 {
+    font-size: 1.8rem;
+    color: var(--text-color-dark);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+/* 🌟 Цветове за текстовите редове в опциите */
+.option-line-1 {
+    color: red;
+}
+.option-line-2 {
+    color: blue;
+}
+#startGameBtn.option-line-3 {
+    color: black;
+    font-weight: bold;
+    background-color: var(--primary-color);
+}
+
+#themeOptions label, #countOptions label {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 5px;
     cursor: pointer;
-    border: 1px solid black;
-    object-fit: contain;
 }
 
-#game-message {
-    margin-top: 10px;
+.disabled-theme {
+    color: #999;
+    cursor: not-allowed;
+}
+
+#themeOptions .theme-animals {
+    color: brown;
     font-weight: bold;
 }
+
+#themeOptions .theme-flowers {
+    color: green;
+    font-weight: bold;
+}
+
+.hidden {
+    display
