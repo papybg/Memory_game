@@ -1,130 +1,71 @@
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. КОНФИГУРАЦИЯ ---
+    // 🎯 Дефиниции на темите и техните изображения
     const ALL_THEMES = {
-        превозни_средства: [
-            { id: 'bus', name: 'Автобус', image: 'images/bus.jpg', sound: 'audio/object_sounds/bus.mp3' },
-            { id: 'airplane', name: 'Самолет', image: 'images/airplane.jpg', sound: 'audio/object_sounds/airplane.mp3' },
-            { id: 'firetruck', name: 'Пожарна', image: 'images/firetruck.jpg', sound: 'audio/object_sounds/firetruck.mp3' },
-            { id: 'train', name: 'Влак', image: 'images/train.jpg', sound: 'audio/object_sounds/train.mp3' },
-            { id: 'truck', name: 'Камион', image: 'images/truck.jpg', sound: 'audio/object_sounds/truck.mp3' }
-        ],
-        animals: [
-            { id: 'dog', name: 'Куче', image: 'images/animals/dog.jpg', sound: 'audio/object_sounds/dog.mp3' },
-            { id: 'cat', name: 'Котка', image: 'images/animals/cat.jpg', sound: 'audio/object_sounds/cat.mp3' },
-            { id: 'lion', name: 'Лъв', image: 'images/animals/lion.jpg', sound: 'audio/object_sounds/lion.mp3' },
-            { id: 'elephant', name: 'Слон', image: 'images/animals/elephant.jpg', sound: 'audio/object_sounds/elephant.mp3' },
-            { id: 'monkey', name: 'Маймуна', image: 'images/animals/monkey.jpg', sound: 'audio/object_sounds/monkey.mp3' }
-        ],
-        flowers: [
-             { id: 'rose', name: 'Роза', image: 'images/flowers/rose.jpg', sound: 'audio/object_sounds/magic_chime_1.mp3' },
-             { id: 'tulip', name: 'Лале', image: 'images/flowers/tulip.jpg', sound: 'audio/object_sounds/magic_chime_2.mp3' },
-             { id: 'lily', name: 'Лилия', image: 'images/flowers/lily.jpg', sound: 'audio/object_sounds/magic_chime_3.mp3' }
-        ],
-        птици: [
-            { id: 'rooster', name: 'Петел', image: 'images/птици/rooster.jpg', sound: 'audio/object_sounds/rooster.mp3' },
-            { id: 'owl', name: 'Бухал', image: 'images/птици/owl.jpg', sound: 'audio/object_sounds/owl.mp3' },
-            { id: 'stork', name: 'Щъркел', image: 'images/птици/stork.jpg', sound: 'audio/object_sounds/stork.mp3' }
-        ]
+        превозни_средства: ['bus.jpg', 'airplane.jpg', 'firetruck.jpg', 'train.jpg', 'truck.jpg'],
+        animals: ['dog.jpg', 'cat.jpg', 'lion.jpg', 'elephant.jpg', 'monkey.jpg'],
+        flowers: ['rose.jpg', 'tulip.jpg', 'lily.jpg', 'daisy.jpg', 'sunflower.jpg']
     };
-    const GAMES_TO_UNLOCK = 30;
 
-    // --- 2. DOM ЕЛЕМЕНТИ ---
+    // 🎯 DOM елементи
     const themeRadios = document.querySelectorAll('input[name="theme"]');
     const countRadios = document.querySelectorAll('input[name="count"]');
-    const birdThemeRadio = document.querySelector('input[value="птици"]');
     const startGameBtn = document.getElementById('startGameBtn');
     const optionsContainer = document.getElementById('optionsContainer');
+
     const gameTitleEl = document.getElementById('gameTitle');
     const messageDisplay = document.getElementById('gameMessage');
-    const controlsEl = document.getElementById('controls');
     const startBtn = document.getElementById('start');
     const reloadBtn = document.getElementById('reload');
     const backToMenuBtn = document.getElementById('backToMenu');
     const allPicsEl = document.getElementById('allPics');
     const gamePicsEl = document.getElementById('gamePics');
     const containerEl = document.getElementById('container');
+    const controlsEl = document.getElementById('controls');
 
-    // --- 3. СЪСТОЯНИЕ НА ИГРАТА ---
+    // 🎯 Променливи за състоянието на играта (групирани в обект)
     const gameState = {
-        currentThemeKey: null,
+        currentThemeImages: [],
         numberOfPics: 0,
         selectedGamePics: [],
-        hiddenCardElement: null,
-        originalPicData: null,
+        hiddenImageElement: null,
+        originalHiddenImageSrc: '',
+        originalHiddenImageName: '',
         awaitingChoice: false,
     };
 
-    // --- 4. АУДИО ---
-    const bravoAudio = new Audio('audio/bravo_uily.wav'); 
+    // Аудио елементи за успех и грешка
+    const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
-    // --- 5. ОСНОВНИ ФУНКЦИИ ---
+    // --- Функции ---
+
+    /**
+     * Алгоритъм на Fisher-Yates за случайно разбъркване на масив.
+     * @param {Array} array - Масивът за разбъркване.
+     * @returns {Array} Разбърканият масив.
+     */
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // ES6 swap
+        }
+        return array;
+    }
 
     function updateStartButtonState() {
-        const themeSelected = document.querySelector('input[name="theme"]:checked');
-        const countSelected = document.querySelector('input[name="count"]:checked');
+        const themeSelected = Array.from(themeRadios).some(r => r.checked);
+        const countSelected = Array.from(countRadios).some(r => r.checked);
         startGameBtn.disabled = !(themeSelected && countSelected);
     }
 
-    function updateCountOptionsAvailability() {
-        const selectedThemeKey = document.querySelector('input[name="theme"]:checked')?.value;
-        if (!selectedThemeKey) return;
-
-        const maxPicsInTheme = ALL_THEMES[selectedThemeKey].length;
-
-        countRadios.forEach(radio => {
-            const label = radio.closest('label');
-            if (parseInt(radio.value) > maxPicsInTheme) {
-                radio.disabled = true;
-                label.classList.add('disabled-theme');
-            } else {
-                radio.disabled = false;
-                label.classList.remove('disabled-theme');
-            }
-        });
-
-        const currentSelectedCount = document.querySelector('input[name="count"]:checked');
-        if (currentSelectedCount && currentSelectedCount.disabled) {
-            const lastEnabledRadio = [...countRadios].reverse().find(r => !r.disabled);
-            if (lastEnabledRadio) {
-                lastEnabledRadio.checked = true;
-            }
-        }
-    }
-
-    function checkUnlockStatus() {
-        let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount') || '0');
-        if (gamesPlayed >= GAMES_TO_UNLOCK) {
-            birdThemeRadio.disabled = false;
-            const label = birdThemeRadio.closest('label');
-            if(label) {
-                label.classList.remove('disabled-theme');
-                label.innerHTML = label.innerHTML.replace('🔒', '✔️');
-            }
-        }
-    }
-
-    function incrementGamesPlayed() {
-        let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount') || '0');
-        if (gamesPlayed < GAMES_TO_UNLOCK) {
-            gamesPlayed++;
-            localStorage.setItem('gamesPlayedCount', gamesPlayed);
-            if (gamesPlayed === GAMES_TO_UNLOCK) {
-                alert('Поздравления! Отключи нова тема: Птици!');
-                checkUnlockStatus();
-            }
-        }
-    }
-
     function startGame() {
-        gameState.currentThemeKey = document.querySelector('input[name="theme"]:checked').value;
+        const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
         gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
-        
-        const themeLabel = document.querySelector(`input[value="${gameState.currentThemeKey}"]`).closest('label');
-        const themeName = themeLabel.textContent.replace('🔒', '').replace('✔️', '').trim();
+        gameState.currentThemeImages = ALL_THEMES[selectedTheme];
 
-        gameTitleEl.innerHTML = `Познай<br>${themeName.toUpperCase()}!`;
-        
+        gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
+
         optionsContainer.classList.add('hidden');
         controlsEl.classList.remove('hidden');
         containerEl.classList.remove('hidden');
@@ -133,167 +74,145 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAllPics();
         resetGameState();
     }
-    
-    function renderGamePics() {
-        gamePicsEl.innerHTML = ''; 
-        
-        const allThemeImages = ALL_THEMES[gameState.currentThemeKey];
-        const shuffledImages = [...allThemeImages].sort(() => 0.5 - Math.random());
-        gameState.selectedGamePics = shuffledImages.slice(0, gameState.numberOfPics);
-
-        gameState.selectedGamePics.forEach((picData) => {
-            const card = document.createElement('div');
-            card.className = 'game-card';
-            card.dataset.id = picData.id;
-
-            const mainImage = document.createElement('img');
-            mainImage.src = picData.image;
-            mainImage.alt = picData.name;
-            mainImage.className = 'card-image is-visible';
-
-            const placeholderImage = document.createElement('img');
-            placeholderImage.src = 'images/hide.png';
-            placeholderImage.alt = 'Скрита картинка';
-            placeholderImage.className = 'card-placeholder is-hidden';
-
-            card.appendChild(mainImage);
-            card.appendChild(placeholderImage);
-            gamePicsEl.appendChild(card);
-        });
-    }
 
     function renderAllPics() {
         allPicsEl.innerHTML = '';
-        const allThemeImages = ALL_THEMES[gameState.currentThemeKey];
-
-        allThemeImages.forEach(picData => {
+        gameState.currentThemeImages.forEach(name => {
             const img = document.createElement('img');
-            img.src = picData.image;
-            img.dataset.id = picData.id;
-            img.alt = picData.name;
+            img.src = 'images/' + name;
+            img.dataset.name = name;
+            img.alt = name.replace('.jpg', '');
             img.addEventListener('click', chooseHandler);
             allPicsEl.appendChild(img);
         });
     }
 
+    function renderGamePics() {
+        gamePicsEl.innerHTML = '';
+        const shuffledImages = shuffleArray([...gameState.currentThemeImages]);
+        gameState.selectedGamePics = shuffledImages.slice(0, gameState.numberOfPics);
+
+        gameState.selectedGamePics.forEach((name, idx) => {
+            const img = document.createElement('img');
+            img.src = 'images/' + name;
+            img.dataset.idx = idx;
+            img.dataset.name = name;
+            img.alt = name.replace('.jpg', '');
+            gamePicsEl.appendChild(img);
+        });
+    }
+
+    /* <<< ПРОМЯНА: Цялата функция е променена, за да поддържа плавна анимация. */
     function hideRandomPicture() {
         if (gameState.awaitingChoice) return;
-        restoreHiddenImage();
+        restoreHiddenImage(); // Възстановява предишна скрита, ако има
 
-        const cards = gamePicsEl.querySelectorAll('.game-card');
-        const hiddenIndex = Math.floor(Math.random() * cards.length);
-        
-        gameState.hiddenCardElement = cards[hiddenIndex];
-        const hiddenPicId = gameState.hiddenCardElement.dataset.id;
-        gameState.originalPicData = gameState.selectedGamePics.find(p => p.id === hiddenPicId);
-        
-        const mainImage = gameState.hiddenCardElement.querySelector('.card-image');
-        const placeholderImage = gameState.hiddenCardElement.querySelector('.card-placeholder');
+        const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
+        gameState.hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex];
 
-        mainImage.classList.remove('is-visible');
-        mainImage.classList.add('is-hidden');
-        
-        placeholderImage.classList.remove('is-hidden');
-        placeholderImage.classList.add('is-visible');
+        // Запазваме оригиналните данни
+        gameState.originalHiddenImageSrc = gameState.hiddenImageElement.src;
+        gameState.originalHiddenImageName = gameState.hiddenImageElement.dataset.name;
+
+        // Първо - добавяме класа, за да започне избледняването
+        gameState.hiddenImageElement.classList.add('fading-out');
+
+        // Изчакваме анимацията да приключи (1.5с)
+        setTimeout(() => {
+            // Проверяваме дали елементът все още съществува
+            if (gameState.hiddenImageElement) {
+                // Сменяме картинката, докато е невидима
+                gameState.hiddenImageElement.src = 'images/hide.png';
+                gameState.hiddenImageElement.dataset.name = 'hide.png';
+                gameState.hiddenImageElement.alt = 'Скрита картинка';
+
+                // Махаме класа, за да се появи плавно новата картинка
+                gameState.hiddenImageElement.classList.remove('fading-out');
+            }
+        }, 1500); // 1.5 секунди, колкото е transition в CSS
 
         gameState.awaitingChoice = true;
         startBtn.classList.add('hidden');
-        showMessage('Познай кое липсва!');
-    }
-    
-    function restoreHiddenImage() {
-        if (gameState.hiddenCardElement) {
-            const mainImage = gameState.hiddenCardElement.querySelector('.card-image');
-            const placeholderImage = gameState.hiddenCardElement.querySelector('.card-placeholder');
-
-            mainImage.classList.add('is-visible');
-            mainImage.classList.remove('is-hidden');
-
-            placeholderImage.classList.add('is-hidden');
-            placeholderImage.classList.remove('is-visible');
-
-            gameState.hiddenCardElement = null;
-        }
+        showMessage('Познай кое липсва!', 'info');
     }
 
     function chooseHandler(e) {
         if (!gameState.awaitingChoice) return;
 
-        const chosenId = e.target.dataset.id;
-        const hiddenId = gameState.originalPicData.id;
+        const chosen = e.target.dataset.name;
+        const hidden = gameState.originalHiddenImageName;
 
-        if (chosenId === hiddenId) {
+        if (chosen === hidden) {
+            showMessage('Браво, Уйли!', 'success');
+            bravoAudio.currentTime = 0;
+            bravoAudio.play().catch(e => console.error("Error playing audio:", e));
+
             restoreHiddenImage();
-            
-            const correctSoundPath = gameState.originalPicData.sound;
-            if (correctSoundPath) {
-                const objectAudio = new Audio(correctSoundPath);
-                objectAudio.play().catch(err => console.error("Audio play failed:", err));
-                objectAudio.onended = () => {
-                    bravoAudio.currentTime = 0;
-                    bravoAudio.play().catch(err => console.error("Audio play failed:", err));
-                };
-            } else {
-                bravoAudio.currentTime = 0;
-                bravoAudio.play().catch(err => console.error("Audio play failed:", err));
-            }
-            
-            showMessage('Браво!', 'success');
+
             gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
         } else {
-            opitaiPakAudio.currentTime = 0;
-            opitaiPakAudio.play().catch(err => console.error("Audio play failed:", err));
             showMessage('Опитай пак!', 'error');
+            opitaiPakAudio.currentTime = 0;
+            opitaiPakAudio.play().catch(e => console.error("Error playing audio:", e));
         }
     }
 
-    function showMessage(text, type = 'info') {
+    function showMessage(text, type) {
+        messageDisplay.className = 'gameMessage'; // Нулиране на класовете
         messageDisplay.textContent = text;
-        messageDisplay.className = 'gameMessage'; // Reset classes
-        
+
+        // Добавяне на класовете с малко закъснение за да се задейства transition
         setTimeout(() => {
             messageDisplay.classList.add('message-animate', `message-${type}`);
         }, 10);
     }
 
+    function restoreHiddenImage() {
+        if (gameState.hiddenImageElement && gameState.originalHiddenImageSrc) {
+            gameState.hiddenImageElement.src = gameState.originalHiddenImageSrc;
+            gameState.hiddenImageElement.dataset.name = gameState.originalHiddenImageName;
+            gameState.hiddenImageElement.alt = gameState.originalHiddenImageName.replace('.jpg', '');
+            // Гарантираме, че картинката е видима при възстановяване
+            gameState.hiddenImageElement.classList.remove('fading-out');
+        }
+    }
+
     function resetGameState() {
         restoreHiddenImage();
+
         gameState.awaitingChoice = false;
-        gameState.originalPicData = null;
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.');
+        gameState.hiddenImageElement = null;
+        gameState.originalHiddenImageSrc = '';
+        gameState.originalHiddenImageName = '';
+
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
+
         reloadBtn.classList.add('hidden');
         startBtn.classList.remove('hidden');
+        startBtn.disabled = false;
     }
-    
+
     function goBackToMenu() {
-        gameTitleEl.innerHTML = 'Познай<br>КАРТИНКАТА!';
+        gameTitleEl.textContent = 'Познай КАРТИНКАТА!';
         controlsEl.classList.add('hidden');
         containerEl.classList.add('hidden');
         optionsContainer.classList.remove('hidden');
-        showMessage('');
+        showMessage('', 'info'); // Изчистване на съобщението
     }
 
-    // --- 6. СЛУШАТЕЛИ НА СЪБИТИЯ ---
-    themeRadios.forEach(r => {
-        r.addEventListener('change', () => {
-            updateCountOptionsAvailability();
-            updateStartButtonState();
-        });
-    });
+    // --- Слушатели на събития ---
+    themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
     countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
-    
     startGameBtn.addEventListener('click', startGame);
     startBtn.addEventListener('click', hideRandomPicture);
     reloadBtn.addEventListener('click', () => {
-        incrementGamesPlayed();
-        startGame(); // Презарежда играта със същите настройки
+        renderGamePics();
+        resetGameState();
     });
     backToMenuBtn.addEventListener('click', goBackToMenu);
 
-    // --- 7. ПЪРВОНАЧАЛНА ИНИЦИАЛИЗАЦИЯ ---
-    checkUnlockStatus();
-    updateCountOptionsAvailability(); // Проверяваме опциите и за избраната по подразбиране тема
+    // --- Първоначална инициализация ---
     updateStartButtonState();
 });
