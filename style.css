@@ -1,4 +1,127 @@
-/* ... (всички стилове до #gamePics остават същите) ... */
+/* 🌟 Основни стилове и CSS променливи */
+:root {
+    --primary-color: #007bff;
+    --primary-hover-focus-color: #0056b3;
+    --background-light: #f5f5f5;
+    --background-game-section-1: #e0f7fa;
+    --background-game-section-2: #f0f4c3;
+    --border-color-dark: #555;
+    --border-color-light: #ccc;
+    --disabled-button-color: #ccc;
+    --text-color-dark: #333;
+    --success-color: #28a745;
+    --error-color: #dc3545;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  background-color: var(--background-light);
+  background-image: url('images/fon1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: flex-start;
+  padding-top: 2rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+#gameTitle {
+  font-size: 3.2rem; /* Умерен размер за мобилни */
+  font-weight: bold; 
+  line-height: 1;
+  margin: 0.8rem 0;
+  color: #fff;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+  transition: all 0.5s ease-out; 
+}
+
+#gameMessage {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-height: 1.5em;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.message-animate {
+    opacity: 1;
+    transform: scale(1);
+}
+.message-success { color: var(--success-color); }
+.message-error { color: var(--error-color); }
+
+#optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 1rem auto;
+    padding: 25px; 
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+    width: 90%; 
+    max-width: 400px; 
+}
+
+#optionsContainer fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#optionsContainer legend {
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+.disabled-theme {
+    color: #999;
+    cursor: not-allowed;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--primary-hover-focus-color);
+}
+
+button:disabled {
+  background-color: var(--disabled-button-color);
+  cursor: not-allowed;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 10px auto;
+}
 
 #gamePics {
   display: flex;
@@ -6,20 +129,14 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
-  background-color: var(--background-game-section-1);
-  border: 2px solid var(--border-color-primary);
-  border-radius: 10px;
-  padding: 15px;
   min-height: 180px;
 }
 
-/* 🌟 НОВА СТРУКТУРА И СТИЛОВЕ ЗА КАРТИТЕ 🌟 */
-
+/* СТИЛОВЕ ЗА КАРТИТЕ С АНИМАЦИЯ */
 .game-card {
-    position: relative; /* Важно за позиционирането на слоевете */
+    position: relative;
     width: 180px;
     height: 180px;
-    cursor: pointer;
 }
 
 .game-card .card-image,
@@ -30,29 +147,57 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    object-position: center;
     border: 2px solid var(--border-color-dark);
     border-radius: 10px;
-    transition: opacity 0.4s ease-in-out; /* Плавната анимация! */
-    background-color: #fff; /* Бял фон, за да не прозират */
+    transition: opacity 0.4s ease-in-out;
+    background-color: #fff;
 }
 
-/* Класове за контрол на видимостта */
 .is-visible {
     opacity: 1;
 }
+
 .is-hidden {
     opacity: 0;
+    pointer-events: none; /* Да не може да се клика на скрития слой */
 }
-
-.game-card:hover .card-image,
-.game-card:focus .card-image {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
-  outline: none;
-}
-
 
 #allPics {
-  /* ... (стиловете за #allPics и надолу остават същите) ... */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  background-color: var(--background-game-section-2);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+#allPics img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+#allPics img:hover {
+  transform: scale(1.05);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Медийни заявки за адаптивност */
+@media (max-width: 768px) {
+    .game-card { width: 150px; height: 150px; }
+    #allPics img { width: 100px; height: 100px; }
+}
+
+@media (max-width: 480px) {
+    .game-card { width: 90px; height: 90px; }
+    #allPics img { width: 70px; height: 70px; }
+    #gamePics, #allPics { gap: 10px; }
 }
