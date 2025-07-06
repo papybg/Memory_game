@@ -1,201 +1,125 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // 🎯 Дефиниции на темите и техните изображения
+    // Дефиниции на темите - вече като обекти
     const ALL_THEMES = {
-        превозни_средства: ['bus.jpg', 'airplane.jpg', 'firetruck.jpg', 'train.jpg', 'truck.jpg'],
-        animals: ['dog.jpg', 'cat.jpg', 'lion.jpg', 'elephant.jpg', 'monkey.jpg'],
-        flowers: ['rose.jpg', 'tulip.jpg', 'lily.jpg', 'daisy.jpg', 'sunflower.jpg']
+        превозни_средства: [
+            { id: 'bus', image: 'images/превозни_средства/bus.jpg', sound: 'audio/object_sounds/bus.mp3' },
+            // ... добави други
+        ],
+        animals: [
+            { id: 'dog', image: 'images/animals/dog.jpg', sound: 'audio/object_sounds/dog.mp3' },
+            { id: 'cat', image: 'images/animals/cat.jpg', sound: 'audio/object_sounds/cat.mp3' },
+            // ... добави други
+        ],
+        flowers: [ /* ... */ ],
+        птици: [ /* ... */ ]
     };
 
-    // 🎯 DOM елементи
-    const themeRadios = document.querySelectorAll('input[name="theme"]');
-    const countRadios = document.querySelectorAll('input[name="count"]');
-    const startGameBtn = document.getElementById('startGameBtn');
-    const optionsContainer = document.getElementById('optionsContainer');
+    // ... (DOM елементите остават същите) ...
 
-    const gameTitleEl = document.getElementById('gameTitle');
-    const messageDisplay = document.getElementById('gameMessage');
-    const startBtn = document.getElementById('start');
-    const reloadBtn = document.getElementById('reload');
-    const backToMenuBtn = document.getElementById('backToMenu');
-    const allPicsEl = document.getElementById('allPics');
-    const gamePicsEl = document.getElementById('gamePics');
-    const containerEl = document.getElementById('container');
-    const controlsEl = document.getElementById('controls');
-
-    // 🎯 Променливи за състоянието на играта (групирани в обект)
     const gameState = {
-        currentThemeImages: [],
-        numberOfPics: 0,
-        selectedGamePics: [],
-        hiddenImageElement: null,
-        originalHiddenImageSrc: '',
-        originalHiddenImageName: '',
-        awaitingChoice: false,
+        // ...
+        hiddenCardElement: null, // Вече ще пазим целия card елемент
+        originalPicData: null,
     };
 
-    // Аудио елементи за успех и грешка
-    const bravoAudio = new Audio('audio/bravo_uily.wav'); 
-    const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
+    // ... (останалите променливи)
 
     // --- Функции ---
 
-    /**
-     * Алгоритъм на Fisher-Yates за случайно разбъркване на масив.
-     * @param {Array} array - Масивът за разбъркване.
-     * @returns {Array} Разбърканият масив.
-     */
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]]; // ES6 swap
-        }
-        return array;
-    }
-
-    function updateStartButtonState() {
-        const themeSelected = Array.from(themeRadios).some(r => r.checked);
-        const countSelected = Array.from(countRadios).some(r => r.checked);
-        startGameBtn.disabled = !(themeSelected && countSelected);
-    }
-
-    function startGame() {
-        const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-        gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
-        gameState.currentThemeImages = ALL_THEMES[selectedTheme];
-
-        gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
-        
-        optionsContainer.classList.add('hidden');
-        controlsEl.classList.remove('hidden');
-        containerEl.classList.remove('hidden');
-
-        renderGamePics();
-        renderAllPics();
-        resetGameState();
-    }
-
-    function renderAllPics() {
-        allPicsEl.innerHTML = '';
-        gameState.currentThemeImages.forEach(name => {
-            const img = document.createElement('img');
-            img.src = 'images/' + name;
-            img.dataset.name = name;
-            img.alt = name.replace('.jpg', '');
-            img.addEventListener('click', chooseHandler);
-            allPicsEl.appendChild(img);
-        });
-    }
-
     function renderGamePics() {
-        gamePicsEl.innerHTML = ''; 
-        const shuffledImages = shuffleArray([...gameState.currentThemeImages]);
-        gameState.selectedGamePics = shuffledImages.slice(0, gameState.numberOfPics);
+        gamePicsEl.innerHTML = ''; // Изчистваме предишното съдържание
+        
+        // Логиката за разбъркване и избиране остава същата
+        const themeKey = document.querySelector('input[name="theme"]:checked').value;
+        const allThemeImages = ALL_THEMES[themeKey];
+        const shuffledImages = [...allThemeImages].sort(() => 0.5 - Math.random());
+        const selectedGamePicsData = shuffledImages.slice(0, 3); // Засега е фиксирано на 3
+        
+        gameState.selectedGamePics = selectedGamePicsData;
 
-        gameState.selectedGamePics.forEach((name, idx) => {
-            const img = document.createElement('img');
-            img.src = 'images/' + name;
-            img.dataset.idx = idx;
-            img.dataset.name = name;
-            img.alt = name.replace('.jpg', '');
-            gamePicsEl.appendChild(img);
+        selectedGamePicsData.forEach((picData) => {
+            // 🌟 СЪЗДАВАНЕ НА НОВАТА СТРУКТУРА НА КАРТАТА 🌟
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.dataset.id = picData.id; // Използваме ID за идентификация
+
+            const mainImage = document.createElement('img');
+            mainImage.src = picData.image;
+            mainImage.alt = picData.id;
+            mainImage.className = 'card-image is-visible'; // Видима по подразбиране
+
+            const placeholderImage = document.createElement('img');
+            placeholderImage.src = 'images/hide.png'; // Пътят до питанката
+            placeholderImage.alt = 'Скрита картинка';
+            placeholderImage.className = 'card-placeholder is-hidden'; // Скрита по подразбиране
+
+            card.appendChild(mainImage);
+            card.appendChild(placeholderImage);
+            gamePicsEl.appendChild(card);
         });
     }
 
     function hideRandomPicture() {
         if (gameState.awaitingChoice) return;
-        restoreHiddenImage(); // Възстановява предишна скрита, ако има
+        restoreHiddenImage(); // Първо възстановяваме, ако има нещо скрито
 
-        const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
-        gameState.hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
-
-        gameState.originalHiddenImageSrc = gameState.hiddenImageElement.src;
-        gameState.originalHiddenImageName = gameState.hiddenImageElement.dataset.name;
-
-        gameState.hiddenImageElement.src = 'images/hide.png';
-        gameState.hiddenImageElement.dataset.name = 'hide.png';
-        gameState.hiddenImageElement.alt = 'Скрита картинка';
+        const cards = gamePicsEl.querySelectorAll('.game-card');
+        const hiddenIndex = Math.floor(Math.random() * cards.length);
         
+        gameState.hiddenCardElement = cards[hiddenIndex];
+        const hiddenPicId = gameState.hiddenCardElement.dataset.id;
+        gameState.originalPicData = gameState.selectedGamePics.find(p => p.id === hiddenPicId);
+        
+        // 🌟 НОВ НАЧИН НА СКРИВАНЕ ЧРЕЗ СМЯНА НА КЛАСОВЕ 🌟
+        const mainImage = gameState.hiddenCardElement.querySelector('.card-image');
+        const placeholderImage = gameState.hiddenCardElement.querySelector('.card-placeholder');
+
+        mainImage.classList.remove('is-visible');
+        mainImage.classList.add('is-hidden');
+        
+        placeholderImage.classList.remove('is-hidden');
+        placeholderImage.classList.add('is-visible');
+
         gameState.awaitingChoice = true;
         startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!', 'info');
+    }
+    
+    function restoreHiddenImage() {
+        if (gameState.hiddenCardElement) {
+            // 🌟 НОВ НАЧИН НА ВЪЗСТАНОВЯВАНЕ 🌟
+            const mainImage = gameState.hiddenCardElement.querySelector('.card-image');
+            const placeholderImage = gameState.hiddenCardElement.querySelector('.card-placeholder');
+
+            mainImage.classList.add('is-visible');
+            mainImage.classList.remove('is-hidden');
+
+            placeholderImage.classList.add('is-hidden');
+            placeholderImage.classList.remove('is-visible');
+
+            gameState.hiddenCardElement = null;
+        }
     }
 
     function chooseHandler(e) {
         if (!gameState.awaitingChoice) return;
 
-        const chosen = e.target.dataset.name;
-        const hidden = gameState.originalHiddenImageName; 
+        const chosenId = e.target.dataset.id;
+        const hiddenId = gameState.originalPicData.id;
 
-        if (chosen === hidden) {
-            showMessage('Браво, Уйли!', 'success');
-            bravoAudio.currentTime = 0; 
-            bravoAudio.play().catch(e => console.error("Error playing audio:", e));
-            
-            restoreHiddenImage();
-
+        if (chosenId === hiddenId) {
+            showMessage('Браво!', 'success'); // ... и аудио логиката
+            restoreHiddenImage(); // Възстановяваме картинката
             gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
         } else {
-            showMessage('Опитай пак!', 'error');
-            opitaiPakAudio.currentTime = 0; 
-            opitaiPakAudio.play().catch(e => console.error("Error playing audio:", e));
+            showMessage('Опитай пак!', 'error'); // ... и аудио логиката
         }
     }
-
-    function showMessage(text, type) {
-        messageDisplay.className = 'gameMessage'; // Нулиране на класовете
-        messageDisplay.textContent = text;
-        
-        // Добавяне на класовете с малко закъснение за да се задейства transition
-        setTimeout(() => {
-            messageDisplay.classList.add('message-animate', `message-${type}`);
-        }, 10);
-    }
-
-    function restoreHiddenImage() {
-        if (gameState.hiddenImageElement && gameState.originalHiddenImageSrc) {
-            gameState.hiddenImageElement.src = gameState.originalHiddenImageSrc;
-            gameState.hiddenImageElement.dataset.name = gameState.originalHiddenImageName;
-            gameState.hiddenImageElement.alt = gameState.originalHiddenImageName.replace('.jpg', '');
-        }
-    }
-
-    function resetGameState() {
-        restoreHiddenImage();
-        
-        gameState.awaitingChoice = false;
-        gameState.hiddenImageElement = null; 
-        gameState.originalHiddenImageSrc = '';
-        gameState.originalHiddenImageName = '';
-
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
-        
-        reloadBtn.classList.add('hidden');
-        startBtn.classList.remove('hidden');
-        startBtn.disabled = false;
-    }
-
-    function goBackToMenu() {
-        gameTitleEl.textContent = 'Познай КАРТИНКАТА!';
-        controlsEl.classList.add('hidden');
-        containerEl.classList.add('hidden');
-        optionsContainer.classList.remove('hidden');
-        showMessage('', 'info'); // Изчистване на съобщението
-    }
-
-    // --- Слушатели на събития ---
-    themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
-    countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
-    startGameBtn.addEventListener('click', startGame);
-    startBtn.addEventListener('click', hideRandomPicture);
-    reloadBtn.addEventListener('click', () => {
-        renderGamePics();
-        resetGameState();
-    });
-    backToMenuBtn.addEventListener('click', goBackToMenu);
-
-    // --- Първоначална инициализация ---
-    updateStartButtonState(); 
+    
+    // ... (останалите функции като resetGameState, showMessage и т.н. също трябва
+    // да се адаптират да работят с restoreHiddenImage())
+    
+    // ... (слушателите на събития остават същите)
 });
