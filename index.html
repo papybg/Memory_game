@@ -18,9 +18,20 @@
                 <label><input type="radio" name="theme" value="превозни_средства"> Превозни средства</label>
                 <label><input type="radio" name="theme" value="animals"> Животни</label>
                 <label><input type="radio" name="theme" value="flowers"> Цветя</label>
-                <label><input type="radio" name="theme" value="птици" disabled> Птици 🔒</label>
+                <label class="disabled-theme"><input type="radio" name="theme" value="птици" disabled> Птици 🔒</label>
             </div>
         </fieldset>
+        
+        <fieldset>
+            <legend class="option-line-2">Избери брой картинки:</legend>
+            <div id="countOptions">
+                <label><input type="radio" name="count" value="2"> 2</label>
+                <label><input type="radio" name="count" value="3" checked> 3</label>
+                <label><input type="radio" name="count" value="4"> 4</label>
+                <label><input type="radio" name="count" value="5"> 5</label>
+            </div>
+        </fieldset>
+
         <button id="startGameBtn" disabled class="option-line-3">Започни играта</button> 
     </div>
 
@@ -32,10 +43,8 @@
     </div>
 
     <div id="container" class="hidden">
-        <div id="gamePics" class="game-section">
-            </div>
-        <div id="allPics" class="game-section">
-            </div>
+        <div id="gamePics" class="game-section"></div>
+        <div id="allPics" class="game-section"></div>
     </div>
 
     <script src="script.js"></script>
