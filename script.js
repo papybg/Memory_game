@@ -2,9 +2,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Обект за превод на имената на темите
     const THEME_TRANSLATIONS = {
-        превозни_средства: 'ПРЕВОЗНИТЕ СРЕДСТВА',
-        animals: 'ЖИВОТНИТЕ',
-        flowers: 'ЦВЕТЯТА'
+        превозни_средства: 'ПРЕВОЗНИ СРЕДСТВА',
+        animals: 'ЖИВОТНИ',
+        flowers: 'ЦВЕТЯ'
     };
 
     // 🎯 DOM елементи
@@ -57,8 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGame() {
+        // Смяна на фона за игралната страница
+        document.body.classList.remove('bg-menu');
+        document.body.classList.add('bg-game');
+
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-        // Използваме превода, ако съществува
         const themeDisplayName = THEME_TRANSLATIONS[selectedTheme] || selectedTheme.replace('_', ' ').toUpperCase();
 
         gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
@@ -185,6 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function goBackToMenu() {
+        // Смяна на фона обратно към този за менюто
+        document.body.classList.remove('bg-game');
+        document.body.classList.add('bg-menu');
+
         gameTitleEl.textContent = 'Познай КАРТИНКАТА!';
         controlsEl.classList.add('hidden');
         containerEl.classList.add('hidden');
@@ -193,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     async function initializeApp() {
+        // Слагаме началния фон при зареждане на приложението
+        document.body.classList.add('bg-menu');
         try {
             const response = await fetch('themes.json');
             if (!response.ok) {
