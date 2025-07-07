@@ -1,1 +1,23 @@
-
+{
+  "превозни_средства": [
+    "bus.jpg",
+    "airplane.jpg",
+    "firetruck.jpg",
+    "train.jpg",
+    "truck.jpg"
+  ],
+  "animals": [
+    "dog.jpg",
+    "cat.jpg",
+    "lion.jpg",
+    "elephant.jpg",
+    "monkey.jpg"
+  ],
+  "flowers": [
+    "rose.jpg",
+    "tulip.jpg",
+    "lily.jpg",
+    "daisy.jpg",
+    "sunflower.jpg"
+  ]
+}
