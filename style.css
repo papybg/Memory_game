@@ -16,22 +16,19 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 10px;
-  text-align: center;
-  background-color: var(--background-light);
-  background-image: url('images/fon1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 2rem;
-  min-height: 100vh;
-  box-sizing: border-box;
+    /* Градиент от ментово зелено (горе вдясно) към светлосиньо (долу вляво) */
+    background-image: linear-gradient(to bottom left, #d2f8d2, #a6e7ff);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 #gameTitle {
