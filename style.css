@@ -53,13 +53,21 @@ body {
 
 
 #gameMessage {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    min-height: 1.5em;
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out, font-size 0.5s ease-out;
+    margin-bottom: 15px; /* Увеличен отстъп */
+    font-size: 1.56rem;  /* Увеличен с 30% от 1.2rem */
+    font-weight: bold;   /* Удебелен текст */
+    min-height: auto;    /* Премахнато ограничение за височина */
+    transition: all 0.5s ease-out;
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: var(--primary-color);
+    color: var(--text-color-dark); /* По-тъмен текст за контраст */
+    
+    /* Нови стилове за фон */
+    background-color: rgba(255, 255, 255, 0.95); /* Почти непрозрачен бял фон */
+    padding: 12px 20px;                         /* Вътрешен отстъп */
+    border-radius: 12px;                        /* Заоблени ъгли */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);   /* Лека сянка */
+    display: inline-block;                      /* Фона да обгръща само текста */
+    max-width: 90%;                             /* Да не излиза извън екрана */
 }
 
 .message-hidden {
