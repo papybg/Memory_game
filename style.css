@@ -87,8 +87,8 @@ body {
   margin-bottom: 15px;
 }
 
-/* --- Стил за бутони с КЛАС --- */
-.game-btn {
+/* --- Стил за бутони - Вариант 3 --- */
+button {
   padding: 12px 24px;
   margin: 5px;
   font-size: 16px;
@@ -103,14 +103,14 @@ body {
   box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
 }
 
-.game-btn:hover, .game-btn:focus {
+button:hover, button:focus {
   background-position: right center;
   box-shadow: 0 8px 20px rgba(221, 36, 118, 0.5);
   transform: translateY(-3px);
   outline: none;
 }
 
-.game-btn:disabled {
+button:disabled {
   background-image: none;
   background-color: var(--disabled-button-color);
   box-shadow: none;
@@ -120,22 +120,12 @@ body {
 
 /* Икони за специфични бутони */
 #start::before {
-  content: '🎩 ';
+  content: '▶️ ';
   margin-right: 5px;
 }
 
 #reload::before {
-  content: '✨ ';
-  margin-right: 5px;
-}
-
-#backToMenu::before {
-  content: '🏠 ';
-  margin-right: 5px;
-}
-
-#startGameBtn::before {
-  content: '🚀 ';
+  content: '🔄 ';
   margin-right: 5px;
 }
 /* --- Край на стила за бутони --- */
@@ -266,7 +256,7 @@ body {
 .option-line-2 { color: blue; }
 
 #startGameBtn.option-line-3 {
-    color: white;
+    color: white; /* Променено, за да съответства на новия стил */
     font-weight: bold;
 }
 
