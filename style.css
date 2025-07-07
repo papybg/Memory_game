@@ -252,3 +252,6 @@ button:disabled {
 }
 .option-line-2 {
     color: blue;
+.hidden {
+    display: none !important;
+}
