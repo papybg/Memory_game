@@ -1,7 +1,12 @@
 // script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // <<< ПРОМЯНА: Дефиницията на темите е премахната оттук.
-    
+    // Обект за превод на имената на темите
+    const THEME_TRANSLATIONS = {
+        превозни_средства: 'ПРЕВОЗНИ СРЕДСТВА',
+        animals: 'ЖИВОТНИ',
+        flowers: 'ЦВЕТЯ'
+    };
+
     // 🎯 DOM елементи
     const themeRadios = document.querySelectorAll('input[name="theme"]');
     const countRadios = document.querySelectorAll('input[name="count"]');
@@ -18,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const containerEl = document.getElementById('container');
     const controlsEl = document.getElementById('controls');
     
-    // <<< ПРОМЯНА: Създаваме празен обект, който ще бъде попълнен с данните от JSON файла.
     let ALL_THEMES = {};
 
     // 🎯 Променливи за състоянието на играта
@@ -36,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
-    // --- Функции (без промяна в тях) ---
+    // --- Функции ---
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -54,10 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startGame() {
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+        // Използваме превода, ако съществува
+        const themeDisplayName = THEME_TRANSLATIONS[selectedTheme] || selectedTheme.replace('_', ' ').toUpperCase();
+
         gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
         gameState.currentThemeImages = ALL_THEMES[selectedTheme];
 
-        gameTitleEl.textContent = `Познай ${selectedTheme.replace('_', ' ').toUpperCase()}!`;
+        gameTitleEl.textContent = `Познай ${themeDisplayName}!`;
         
         optionsContainer.classList.add('hidden');
         controlsEl.classList.remove('hidden');
@@ -185,20 +192,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('', 'info');
     }
     
-    // <<< ПРОМЯНА: Основна функция, която първо зарежда темите и след това инициализира играта.
     async function initializeApp() {
         try {
-            // Използваме fetch за зареждане на JSON файла
             const response = await fetch('themes.json');
             if (!response.ok) {
-                // Хвърляме грешка, ако файлът не е намерен или има друг проблем
                 throw new Error(`Грешка при зареждане на мрежата: ${response.statusText}`);
             }
-            // Попълваме обекта с темите
             ALL_THEMES = await response.json();
 
             // --- Слушатели на събития ---
-            // Слагаме ги тук, за да сме сигурни, че се активират СЛЕД като темите са заредени.
             themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             startGameBtn.addEventListener('click', startGame);
@@ -213,13 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
             updateStartButtonState();
             
         } catch (error) {
-            // Обработка на грешки, ако не успеем да заредим файла
             console.error("Неуспешно зареждане на темите:", error);
             gameTitleEl.textContent = 'ГРЕШКА';
             optionsContainer.innerHTML = `<p style="color: var(--error-color);">Нещо се обърка при зареждането на темите за играта. Моля, опитайте да презаредите страницата.</p>`;
         }
     }
 
-    // <<< ПРОМЯНА: Извикваме новата ни основна функция, за да стартираме всичко.
     initializeApp();
 });
