@@ -1,7 +1,3 @@
-/* style.css */
-body {
-    background: red !important;
-}
 /* 🌟 Основни стилове и CSS променливи */
 :root {
     --primary-color: #007bff; /* Основен син цвят */
@@ -66,7 +62,6 @@ body {
     color: var(--primary-color);
 }
 
-/* Подобрена логика за съобщенията без !important */
 .message-hidden {
     opacity: 0;
     transform: scale(0.8);
@@ -136,15 +131,6 @@ button:disabled {
     box-sizing: border-box;
 }
 
-.game-section h2 {
-    font-size: 1.5rem;
-    color: var(--text-color-dark);
-    margin-top: 0;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color-light);
-}
-
 #gamePics {
   display: flex;
   justify-content: center;
@@ -166,7 +152,6 @@ button:disabled {
   cursor: pointer;
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
-  /* <<< ПРОМЯНА: Добавяме 'opacity' към transition, за да анимираме прозрачността */
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 1.5s ease-in-out;
 }
 
@@ -177,7 +162,6 @@ button:disabled {
   outline: none;
 }
 
-/* <<< ПРОМЯНА: Нов клас, който прави картинката прозрачна */
 .fading-out {
     opacity: 0;
 }
@@ -249,11 +233,39 @@ button:disabled {
     padding-bottom: 10px;
 }
 
-.option-line-1 {
-    color: red;
+.option-line-1 { color: red; }
+.option-line-2 { color: blue; }
+#startGameBtn.option-line-3 {
+    color: black;
+    font-weight: bold;
+    background-color: var(--primary-color);
 }
-.option-line-2 {
-    color: blue;
+
+#themeOptions label, #countOptions label {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+#themeOptions .theme-animals { color: brown; font-weight: bold; }
+#themeOptions .theme-flowers { color: green; font-weight: bold; }
+
 .hidden {
     display: none !important;
+}
+
+/* Медийни заявки за адаптивен дизайн */
+@media (max-width: 768px) {
+  #gameTitle { font-size: 4.5rem; }
+  #gameTitle.title-long { font-size: 3.5rem; }
+  #gamePics img { width: 150px; height: 150px; }
+  #allPics img { width: 100px; height: 100px; }
+}
+
+@media (max-width: 480px) {
+  #gameTitle { font-size: 3.2rem; }
+  #gameTitle.title-long { font-size: 2.5rem; }
+  #gamePics img { width: 70px; height: 70px; }
+  #allPics img { width: 50px; height: 50px; }
 }
