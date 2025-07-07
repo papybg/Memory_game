@@ -1,5 +1,7 @@
 /* style.css */
-
+body {
+    background: red !important;
+}
 /* 🌟 Основни стилове и CSS променливи */
 :root {
     --primary-color: #007bff; /* Основен син цвят */
