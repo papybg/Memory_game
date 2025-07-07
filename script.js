@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hidden = gameState.originalHiddenImageName; 
 
         if (chosen === hidden) {
-            showMessage('Браво, Уйли!', 'success');
+            showMessage('Браво!', 'success');
             bravoAudio.currentTime = 0; 
             bravoAudio.play().catch(e => console.error("Error playing audio:", e));
             
