@@ -1,20 +1,18 @@
 /* 🌟 Основни стилове и CSS променливи */
 :root {
-    --primary-color: #007bff; /* Основен син цвят */
-    --primary-hover-focus-color: #0056b3; /* Цвят при ховър/фокус */
+    --primary-color: #007bff;
+    --primary-hover-focus-color: #0056b3;
     --background-light: #f5f5f5;
-    --background-game-section-1: #e0f7fa; /* Светъл син за горна секция */
-    --background-game-section-2: #f0f4c3; /* Светъл зелен за долна секция */
+    --background-game-section-1: #e0f7fa;
+    --background-game-section-2: #f0f4c3;
     --border-color-dark: #555;
     --border-color-light: #ccc;
     --border-color-primary: #007bff;
     --dashed-border-color: #aed581;
     --disabled-button-color: #ccc;
     --text-color-dark: #333;
-
-    /* Нови променливи за съобщенията */
-    --success-color: #28a745; /* Зелен за успех */
-    --error-color: #dc3545;   /* Червен за грешка */
+    --success-color: #28a745;
+    --error-color: #dc3545;
 }
 
 body {
@@ -36,7 +34,6 @@ body {
   box-sizing: border-box;
 }
 
-/* 🌟 Стилове за заглавието на играта (#gameTitle) */
 #gameTitle {
   font-size: 6.5rem;
   font-weight: bold;
@@ -46,34 +43,32 @@ body {
   text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
   transition: all 0.5s ease-out;
 }
-/* НОВ СТИЛ за дълги заглавия */
+
 #gameTitle.title-long {
     font-size: 5rem;
 }
 
-
 #gameMessage {
-    margin-bottom: 15px; /* Увеличен отстъп */
-    font-size: 1.56rem;  /* Увеличен с 30% от 1.2rem */
-    font-weight: bold;   /* Удебелен текст */
-    min-height: auto;    /* Премахнато ограничение за височина */
+    margin-bottom: 15px;
+    font-size: 1.56rem;
+    font-weight: bold;
+    min-height: auto;
     transition: all 0.5s ease-out;
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: var(--text-color-dark); /* По-тъмен текст за контраст */
-    
-    /* Нови стилове за фон */
-    background-color: rgba(255, 255, 255, 0.95); /* Почти непрозрачен бял фон */
-    padding: 12px 20px;                         /* Вътрешен отстъп */
-    border-radius: 12px;                        /* Заоблени ъгли */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);   /* Лека сянка */
-    display: inline-block;                      /* Фона да обгръща само текста */
-    max-width: 90%;                             /* Да не излиза извън екрана */
+    color: var(--text-color-dark);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    max-width: 90%;
 }
 
 .message-hidden {
     opacity: 0;
     transform: scale(0.8);
 }
+
 .message-animate {
     opacity: 1;
     transform: scale(1);
@@ -92,33 +87,49 @@ body {
   margin-bottom: 15px;
 }
 
+/* --- Стил за бутони - Вариант 3 --- */
 button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   margin: 5px;
   font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  background-color: var(--primary-color);
-  color: black;
   font-weight: bold;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  background-image: linear-gradient(45deg, #FF512F 0%, #DD2476 51%, #FF512F 100%);
+  background-size: 200% auto;
+  transition: all 0.4s ease;
+  box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
 }
 
-button:hover {
-  background-color: var(--primary-hover-focus-color);
-}
-
-button:focus {
-    background-color: var(--primary-hover-focus-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+button:hover, button:focus {
+  background-position: right center;
+  box-shadow: 0 8px 20px rgba(221, 36, 118, 0.5);
+  transform: translateY(-3px);
+  outline: none;
 }
 
 button:disabled {
+  background-image: none;
   background-color: var(--disabled-button-color);
+  box-shadow: none;
+  transform: none;
   cursor: not-allowed;
 }
+
+/* Икони за специфични бутони */
+#start::before {
+  content: '▶️ ';
+  margin-right: 5px;
+}
+
+#reload::before {
+  content: '🔄 ';
+  margin-right: 5px;
+}
+/* --- Край на стила за бутони --- */
+
 
 #container {
   display: flex;
@@ -243,10 +254,10 @@ button:disabled {
 
 .option-line-1 { color: red; }
 .option-line-2 { color: blue; }
+
 #startGameBtn.option-line-3 {
-    color: black;
+    color: white; /* Променено, за да съответства на новия стил */
     font-weight: bold;
-    background-color: var(--primary-color);
 }
 
 #themeOptions label, #countOptions label {
@@ -263,7 +274,6 @@ button:disabled {
     display: none !important;
 }
 
-/* Медийни заявки за адаптивен дизайн */
 @media (max-width: 768px) {
   #gameTitle { font-size: 4.5rem; }
   #gameTitle.title-long { font-size: 3.5rem; }
