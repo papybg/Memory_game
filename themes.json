@@ -1,30 +1,30 @@
 {
   "превозни_средства": [
-    "bus.jpg",
-    "airplane.jpg",
-    "firetruck.jpg",
-    "train.jpg",
-    "truck.jpg"
+    { "image": "bus.jpg", "sound": "bus_sound.wav" },
+    { "image": "airplane.jpg", "sound": "airplane_sound.wav" },
+    { "image": "firetruck.jpg", "sound": "firetruck_sound.wav" },
+    { "image": "train.jpg", "sound": "train_sound.wav" },
+    { "image": "truck.jpg", "sound": "truck_sound.wav" }
   ],
   "animals": [
-    "dog.jpg",
-    "cat.jpg",
-    "lion.jpg",
-    "elephant.jpg",
-    "monkey.jpg"
+    { "image": "dog.jpg", "sound": "dog_sound.wav" },
+    { "image": "cat.jpg", "sound": "cat_sound.wav" },
+    { "image": "lion.jpg", "sound": "lion_sound.wav" },
+    { "image": "elephant.jpg", "sound": "elephant_sound.wav" },
+    { "image": "monkey.jpg", "sound": "monkey_sound.wav" }
   ],
   "flowers": [
-    "rose.jpg",
-    "tulip.jpg",
-    "lily.jpg",
-    "daisy.jpg",
-    "sunflower.jpg"
+    { "image": "rose.jpg", "sound": "tada_sound.wav" },
+    { "image": "tulip.jpg", "sound": "tada_sound.wav" },
+    { "image": "lily.jpg", "sound": "tada_sound.wav" },
+    { "image": "daisy.jpg", "sound": "tada_sound.wav" },
+    { "image": "sunflower.jpg", "sound": "tada_sound.wav" }
   ],
   "птици": [
-    "eagle.jpg",
-    "parrot.jpg",
-    "owl.jpg",
-    "pigeon.jpg",
-    "sparrow.jpg"
+    { "image": "eagle.jpg", "sound": "eagle_sound.wav" },
+    { "image": "parrot.jpg", "sound": "parrot_sound.wav" },
+    { "image": "owl.jpg", "sound": "owl_sound.wav" },
+    { "image": "pigeon.jpg", "sound": "pigeon_sound.wav" },
+    { "image": "sparrow.jpg", "sound": "sparrow_sound.wav" }
   ]
 }
