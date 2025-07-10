@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice: false,
     };
 
-    const bravoAudio = new Audio('audio/bravo.wav'); // Променено име на файла
+    const bravoAudio = new Audio('audio/bravo_uily.wav'); // Променено име на файла
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
     // --- Функции ---
