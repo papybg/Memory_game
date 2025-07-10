@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const containerEl = document.getElementById('container');
     const controlsEl = document.getElementById('controls');
     
+    // Елементи за заключената тема
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
     
@@ -39,11 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice: false,
     };
 
-    const bravoAudio = new Audio('audio/bravo_uily.wav');
+    const bravoAudio = new Audio('audio/bravo.wav'); // Променено име на файла
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
     // --- Функции ---
     
+    // Функция за проверка и отключване на темата
     function checkAndUnlockThemes() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         
@@ -54,21 +56,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             birdsThemeRadio.disabled = true;
             birdsThemeLabel.classList.add('theme-locked');
-            birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}/15.`;
+            birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}/15. Нужни са още ${15 - gamesPlayed}.`;
         }
     }
 
+    // Функция за увеличаване на брояча на изиграни игри
     function incrementGamesPlayed() {
         let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         gamesPlayed++;
         localStorage.setItem('gamesPlayedCount', gamesPlayed);
-        checkAndUnlockThemes();
+        checkAndUnlockThemes(); // Проверка веднага след увеличаване
     }
 
-    // <<< ТУК БЕШЕ ГРЕШКАТА - КОРИГИРАНА ФУНКЦИЯ
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1)); // Този ред липсваше
+            const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
@@ -218,4 +220,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gameTitleEl.textContent = 'Познай КАРТИНКАТА!';
         controlsEl.classList.add('hidden');
-        containerEl.classList.add
+        containerEl.classList.add('hidden');
+        optionsContainer.classList.remove('hidden');
+        showMessage('', 'info');
+    }
+    
+    async function initializeApp() {
+        document.body.classList.add('bg-menu');
+        try {
+            const response = await fetch('themes.json');
+            if (!response.ok) {
+                throw new Error(`Грешка при зареждане на мрежата: ${response.statusText}`);
+            }
+            ALL_THEMES = await response.json();
+
+            themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
+            countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
+            startGameBtn.addEventListener('click', startGame);
+            startBtn.addEventListener('click', hideRandomPicture);
+            reloadBtn.addEventListener('click', () => {
+                renderGamePics();
+                resetGameState();
+            });
+            backToMenuBtn.addEventListener('click', goBackToMenu);
+
+            updateStartButtonState();
+            checkAndUnlockThemes();
+            
+        } catch (error) {
+            console.error("Неуспешно зареждане на темите:", error);
+            gameTitleEl.textContent = 'ГРЕШКА';
+            optionsContainer.innerHTML = `<p style="color: var(--error-color);">Нещо се обърка при зареждането на темите за играта. Моля, опитайте да презаредите страницата.</p>`;
+        }
+    }
+
+    initializeApp();
+});
