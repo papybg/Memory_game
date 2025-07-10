@@ -28,14 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let ALL_THEMES = {};
 
     const gameState = {
-        currentThemeData: [], // Променено име
+        currentThemeData: [],
         numberOfPics: 0,
-        selectedGameItems: [], // Променено име
-        hiddenItem: null, // Променено име
+        selectedGameItems: [],
+        hiddenItem: null,
         awaitingChoice: false,
     };
 
-    const bravoAudio = new Audio('audio/bravo.wav');
+    // Промяната е на реда по-долу
+    const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
     // --- Функции ---
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.currentThemeData.forEach(item => {
             const img = document.createElement('img');
             img.src = 'images/' + item.image;
-            img.dataset.image = item.image; // Използваме data-image
+            img.dataset.image = item.image;
             img.alt = item.image.replace('.jpg', '');
             img.addEventListener('click', chooseHandler);
             allPicsEl.appendChild(img);
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = document.createElement('img');
             img.src = 'images/' + item.image;
             img.dataset.idx = idx;
-            img.dataset.image = item.image; // Използваме data-image
+            img.dataset.image = item.image;
             img.alt = item.image.replace('.jpg', '');
             gamePicsEl.appendChild(img);
         });
@@ -130,9 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
         const hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
         
-        // Запазваме целия обект на скрития елемент
         gameState.hiddenItem = gameState.selectedGameItems[hiddenIndex];
-        gameState.hiddenItem.element = hiddenImageElement; // Запазваме и самия HTML елемент
+        gameState.hiddenItem.element = hiddenImageElement;
 
         hiddenImageElement.src = 'images/hide.png';
         hiddenImageElement.dataset.image = 'hide.png';
@@ -150,17 +150,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const hiddenImageName = gameState.hiddenItem.image;
 
         if (chosenImageName === hiddenImageName) {
-            // Първо възстановяваме картинката
             restoreHiddenImage();
             
-            // Създаваме и пускаме звука на картинката
             const itemSound = new Audio('audio/' + gameState.hiddenItem.sound);
-            itemSound.play();
+            itemSound.play().catch(e => { console.error("Грешка при пускане на звука на картинката:", e); });
             
-            // След като звукът на картинката свърши, пускаме "Браво"
             itemSound.onended = () => {
                 bravoAudio.currentTime = 0; 
-                bravoAudio.play().catch(e => console.error("Error playing audio:", e));
+                bravoAudio.play().catch(e => console.error("Грешка при пускане на 'Браво':", e));
+            };
+            
+            // За случаи, в които файлът не може да се зареди
+            itemSound.onerror = () => {
+                console.error(`Файлът ${itemSound.src} не може да бъде зареден.`);
+                // Пускаме 'Браво' дори ако звукът на картинката не успее
+                bravoAudio.currentTime = 0; 
+                bravoAudio.play().catch(e => console.error("Грешка при пускане на 'Браво':", e));
             };
 
             showMessage('Браво!', 'success');
