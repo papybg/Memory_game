@@ -9,7 +9,7 @@
   "animals": [
     { "image": "dog.jpg", "sound": "dog_sound.wav" },
     { "image": "cat.jpg", "sound": "cat_sound.wav" },
-    { "image": "lion.jpg", "sound": "lion_sound.wav" },
+    { "image": "lion.jpg", "sound": "tiger-roar-loudly-193229.mp3" },
     { "image": "elephant.jpg", "sound": "elephant_sound.wav" },
     { "image": "monkey.jpg", "sound": "monkey_sound.wav" }
   ],
