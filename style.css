@@ -27,11 +27,9 @@ body {
     padding-top: 2rem;
     min-height: 100vh;
     box-sizing: border-box;
-    /* Преход за плавна смяна на фона */
     transition: background-image 0.5s ease-in-out;
 }
 
-/* Клас за фона на менюто */
 .bg-menu {
     background-image: url('images/fon1.jpg');
     background-size: cover;
@@ -39,7 +37,6 @@ body {
     background-attachment: fixed;
 }
 
-/* Клас за фона на играта */
 .bg-game {
     background-image: linear-gradient(to bottom left, #d2f8d2, #a6e7ff);
 }
@@ -98,7 +95,6 @@ body {
   margin-bottom: 15px;
 }
 
-/* --- Стил за бутони с КЛАС --- */
 .game-btn {
   padding: 12px 24px;
   margin: 5px;
@@ -129,28 +125,10 @@ body {
   cursor: not-allowed;
 }
 
-/* Икони за специфични бутони */
-#start::before {
-  content: '🎩 ';
-  margin-right: 5px;
-}
-
-#reload::before {
-  content: '✨ ';
-  margin-right: 5px;
-}
-
-#backToMenu::before {
-  content: '🏠 ';
-  margin-right: 5px;
-}
-
-#startGameBtn::before {
-  content: '🚀 ';
-  margin-right: 5px;
-}
-/* --- Край на стила за бутони --- */
-
+#start::before { content: '🎩 '; margin-right: 5px; }
+#reload::before { content: '✨ '; margin-right: 5px; }
+#backToMenu::before { content: '🏠 '; margin-right: 5px; }
+#startGameBtn::before { content: '🚀 '; margin-right: 5px; }
 
 #container {
   display: flex;
@@ -290,6 +268,21 @@ body {
 
 #themeOptions .theme-animals { color: brown; font-weight: bold; }
 #themeOptions .theme-flowers { color: green; font-weight: bold; }
+
+/* Стил за заключена тема */
+.theme-locked {
+    color: #999;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.theme-locked::after {
+    content: '🔒'; /* Икона катинар */
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    font-size: 0.8em;
+}
 
 .hidden {
     display: none !important;
