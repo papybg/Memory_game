@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const countRadios = document.querySelectorAll('input[name="count"]');
     const startGameBtn = document.getElementById('startGameBtn');
     const optionsContainer = document.getElementById('optionsContainer');
-
     const gameTitleEl = document.getElementById('gameTitle');
     const messageDisplay = document.getElementById('gameMessage');
     const startBtn = document.getElementById('start');
@@ -23,29 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const gamePicsEl = document.getElementById('gamePics');
     const containerEl = document.getElementById('container');
     const controlsEl = document.getElementById('controls');
-    
-    // Елементи за заключената тема
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
     
     let ALL_THEMES = {};
 
     const gameState = {
-        currentThemeImages: [],
+        currentThemeData: [], // Променено име
         numberOfPics: 0,
-        selectedGamePics: [],
-        hiddenImageElement: null,
-        originalHiddenImageSrc: '',
-        originalHiddenImageName: '',
+        selectedGameItems: [], // Променено име
+        hiddenItem: null, // Променено име
         awaitingChoice: false,
     };
 
-    const bravoAudio = new Audio('audio/bravo_uily.wav'); // Променено име на файла
+    const bravoAudio = new Audio('audio/bravo.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
     // --- Функции ---
     
-    // Функция за проверка и отключване на темата
     function checkAndUnlockThemes() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         
@@ -60,12 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Функция за увеличаване на брояча на изиграни игри
     function incrementGamesPlayed() {
         let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         gamesPlayed++;
         localStorage.setItem('gamesPlayedCount', gamesPlayed);
-        checkAndUnlockThemes(); // Проверка веднага след увеличаване
+        checkAndUnlockThemes();
     }
 
     function shuffleArray(array) {
@@ -90,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const themeDisplayName = THEME_TRANSLATIONS[selectedTheme] || selectedTheme.replace('_', ' ').toUpperCase();
 
         gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
-        gameState.currentThemeImages = ALL_THEMES[selectedTheme];
+        gameState.currentThemeData = ALL_THEMES[selectedTheme];
 
         gameTitleEl.textContent = `Познай ${themeDisplayName}!`;
         
@@ -105,11 +98,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderAllPics() {
         allPicsEl.innerHTML = '';
-        gameState.currentThemeImages.forEach(name => {
+        gameState.currentThemeData.forEach(item => {
             const img = document.createElement('img');
-            img.src = 'images/' + name;
-            img.dataset.name = name;
-            img.alt = name.replace('.jpg', '');
+            img.src = 'images/' + item.image;
+            img.dataset.image = item.image; // Използваме data-image
+            img.alt = item.image.replace('.jpg', '');
             img.addEventListener('click', chooseHandler);
             allPicsEl.appendChild(img);
         });
@@ -117,15 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderGamePics() {
         gamePicsEl.innerHTML = ''; 
-        const shuffledImages = shuffleArray([...gameState.currentThemeImages]);
-        gameState.selectedGamePics = shuffledImages.slice(0, gameState.numberOfPics);
+        const shuffledItems = shuffleArray([...gameState.currentThemeData]);
+        gameState.selectedGameItems = shuffledItems.slice(0, gameState.numberOfPics);
 
-        gameState.selectedGamePics.forEach((name, idx) => {
+        gameState.selectedGameItems.forEach((item, idx) => {
             const img = document.createElement('img');
-            img.src = 'images/' + name;
+            img.src = 'images/' + item.image;
             img.dataset.idx = idx;
-            img.dataset.name = name;
-            img.alt = name.replace('.jpg', '');
+            img.dataset.image = item.image; // Използваме data-image
+            img.alt = item.image.replace('.jpg', '');
             gamePicsEl.appendChild(img);
         });
     }
@@ -135,22 +128,16 @@ document.addEventListener('DOMContentLoaded', () => {
         restoreHiddenImage();
 
         const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
-        gameState.hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
-
-        gameState.originalHiddenImageSrc = gameState.hiddenImageElement.src;
-        gameState.originalHiddenImageName = gameState.hiddenImageElement.dataset.name;
+        const hiddenImageElement = gamePicsEl.querySelectorAll('img')[hiddenIndex]; 
         
-        gameState.hiddenImageElement.classList.add('fading-out');
+        // Запазваме целия обект на скрития елемент
+        gameState.hiddenItem = gameState.selectedGameItems[hiddenIndex];
+        gameState.hiddenItem.element = hiddenImageElement; // Запазваме и самия HTML елемент
 
-        setTimeout(() => {
-            if (gameState.hiddenImageElement) {
-                gameState.hiddenImageElement.src = 'images/hide.png';
-                gameState.hiddenImageElement.dataset.name = 'hide.png';
-                gameState.hiddenImageElement.alt = 'Скрита картинка';
-                gameState.hiddenImageElement.classList.remove('fading-out');
-            }
-        }, 1500);
-
+        hiddenImageElement.src = 'images/hide.png';
+        hiddenImageElement.dataset.image = 'hide.png';
+        hiddenImageElement.alt = 'Скрита картинка';
+        
         gameState.awaitingChoice = true;
         startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!', 'info');
@@ -159,21 +146,30 @@ document.addEventListener('DOMContentLoaded', () => {
     function chooseHandler(e) {
         if (!gameState.awaitingChoice) return;
 
-        const chosen = e.target.dataset.name;
-        const hidden = gameState.originalHiddenImageName; 
+        const chosenImageName = e.target.dataset.image;
+        const hiddenImageName = gameState.hiddenItem.image;
 
-        if (chosen === hidden) {
-            showMessage('Браво!', 'success');
-            bravoAudio.currentTime = 0; 
-            bravoAudio.play().catch(e => console.error("Error playing audio:", e));
-            
+        if (chosenImageName === hiddenImageName) {
+            // Първо възстановяваме картинката
             restoreHiddenImage();
             
+            // Създаваме и пускаме звука на картинката
+            const itemSound = new Audio('audio/' + gameState.hiddenItem.sound);
+            itemSound.play();
+            
+            // След като звукът на картинката свърши, пускаме "Браво"
+            itemSound.onended = () => {
+                bravoAudio.currentTime = 0; 
+                bravoAudio.play().catch(e => console.error("Error playing audio:", e));
+            };
+
+            showMessage('Браво!', 'success');
             incrementGamesPlayed();
 
             gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
+
         } else {
             showMessage('Опитай пак!', 'error');
             opitaiPakAudio.currentTime = 0; 
@@ -191,11 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function restoreHiddenImage() {
-        if (gameState.hiddenImageElement && gameState.originalHiddenImageSrc) {
-            gameState.hiddenImageElement.src = gameState.originalHiddenImageSrc;
-            gameState.hiddenImageElement.dataset.name = gameState.originalHiddenImageName;
-            gameState.hiddenImageElement.alt = gameState.originalHiddenImageName.replace('.jpg', '');
-            gameState.hiddenImageElement.classList.remove('fading-out');
+        if (gameState.hiddenItem && gameState.hiddenItem.element) {
+            const el = gameState.hiddenItem.element;
+            el.src = 'images/' + gameState.hiddenItem.image;
+            el.dataset.image = gameState.hiddenItem.image;
+            el.alt = gameState.hiddenItem.image.replace('.jpg', '');
         }
     }
 
@@ -203,9 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         restoreHiddenImage();
         
         gameState.awaitingChoice = false;
-        gameState.hiddenImageElement = null; 
-        gameState.originalHiddenImageSrc = '';
-        gameState.originalHiddenImageName = '';
+        gameState.hiddenItem = null; 
 
         showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.', 'info');
         
