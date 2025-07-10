@@ -130,6 +130,7 @@ body {
 #backToMenu::before { content: '🏠 '; margin-right: 5px; }
 #startGameBtn::before { content: '🚀 '; margin-right: 5px; }
 
+
 #container {
   display: flex;
   flex-direction: column;
@@ -213,13 +214,14 @@ body {
   outline: none;
 }
 
+/* <<< ПРОМЯНА ОТ ТОЧКА 1 ТУК >>> */
 #optionsContainer {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px; /* Увеличено от 15px */
     margin: 1rem auto;
     font-size: 1.1rem;
-    padding: 25px;
+    padding: 35px; /* Увеличено от 25px */
     border: 1px solid var(--border-color-light);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.9);
@@ -269,7 +271,6 @@ body {
 #themeOptions .theme-animals { color: brown; font-weight: bold; }
 #themeOptions .theme-flowers { color: green; font-weight: bold; }
 
-/* Стил за заключена тема */
 .theme-locked {
     color: #999;
     cursor: not-allowed;
@@ -277,7 +278,7 @@ body {
 }
 
 .theme-locked::after {
-    content: '🔒'; /* Икона катинар */
+    content: '🔒';
     position: absolute;
     right: -5px;
     top: -5px;
