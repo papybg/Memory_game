@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const THEME_TRANSLATIONS = {
         превозни_средства: 'ПРЕВОЗНИ СРЕДСТВА',
         animals: 'ЖИВОТНИ',
-        flowers: 'ЦВЕТЯ'
+        flowers: 'ЦВЕТЯ',
+        птици: 'ПТИЦИ'
     };
 
     // 🎯 DOM елементи
@@ -23,9 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const containerEl = document.getElementById('container');
     const controlsEl = document.getElementById('controls');
     
+    // Нови елементи за заключената тема
+    const birdsThemeRadio = document.getElementById('birdsThemeRadio');
+    const birdsThemeLabel = document.getElementById('birdsThemeLabel');
+    
     let ALL_THEMES = {};
 
-    // 🎯 Променливи за състоянието на играта
     const gameState = {
         currentThemeImages: [],
         numberOfPics: 0,
@@ -36,15 +40,36 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice: false,
     };
 
-    // Аудио елементи за успех и грешка
     const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
     // --- Функции ---
+    
+    // Функция за проверка и отключване на темата
+    function checkAndUnlockThemes() {
+        const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
+        
+        if (gamesPlayed >= 15) {
+            birdsThemeRadio.disabled = false;
+            birdsThemeLabel.classList.remove('theme-locked');
+            birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}. Темата е отключена!`;
+        } else {
+            birdsThemeRadio.disabled = true;
+            birdsThemeLabel.classList.add('theme-locked');
+            birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}/15.`;
+        }
+    }
+
+    // Функция за увеличаване на брояча на изиграни игри
+    function incrementGamesPlayed() {
+        let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
+        gamesPlayed++;
+        localStorage.setItem('gamesPlayedCount', gamesPlayed);
+        checkAndUnlockThemes(); // Проверка веднага след увеличаване
+    }
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
@@ -57,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGame() {
-        // Смяна на фона за игралната страница
         document.body.classList.remove('bg-menu');
         document.body.classList.add('bg-game');
 
@@ -143,6 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
             bravoAudio.play().catch(e => console.error("Error playing audio:", e));
             
             restoreHiddenImage();
+            
+            // Увеличаваме брояча само при успешен край на рунда
+            incrementGamesPlayed();
 
             gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
@@ -188,7 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function goBackToMenu() {
-        // Смяна на фона обратно към този за менюто
         document.body.classList.remove('bg-game');
         document.body.classList.add('bg-menu');
 
@@ -200,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     async function initializeApp() {
-        // Слагаме началния фон при зареждане на приложението
         document.body.classList.add('bg-menu');
         try {
             const response = await fetch('themes.json');
@@ -209,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             ALL_THEMES = await response.json();
 
-            // --- Слушатели на събития ---
             themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             startGameBtn.addEventListener('click', startGame);
@@ -220,8 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             backToMenuBtn.addEventListener('click', goBackToMenu);
 
-            // --- Първоначална инициализация ---
             updateStartButtonState();
+            // Проверяваме за отключени теми при стартиране на приложението
+            checkAndUnlockThemes();
             
         } catch (error) {
             console.error("Неуспешно зареждане на темите:", error);
