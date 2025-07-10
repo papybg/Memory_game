@@ -19,5 +19,12 @@
     "lily.jpg",
     "daisy.jpg",
     "sunflower.jpg"
+  ],
+  "птици": [
+    "eagle.jpg",
+    "parrot.jpg",
+    "owl.jpg",
+    "pigeon.jpg",
+    "sparrow.jpg"
   ]
 }
