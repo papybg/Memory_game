@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const containerEl = document.getElementById('container');
     const controlsEl = document.getElementById('controls');
     
-    // Нови елементи за заключената тема
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
     
@@ -45,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Функции ---
     
-    // Функция за проверка и отключване на темата
     function checkAndUnlockThemes() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         
@@ -60,16 +58,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Функция за увеличаване на брояча на изиграни игри
     function incrementGamesPlayed() {
         let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         gamesPlayed++;
         localStorage.setItem('gamesPlayedCount', gamesPlayed);
-        checkAndUnlockThemes(); // Проверка веднага след увеличаване
+        checkAndUnlockThemes();
     }
 
+    // <<< ТУК БЕШЕ ГРЕШКАТА - КОРИГИРАНА ФУНКЦИЯ
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1)); // Този ред липсваше
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
@@ -168,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             restoreHiddenImage();
             
-            // Увеличаваме брояча само при успешен край на рунда
             incrementGamesPlayed();
 
             gameState.awaitingChoice = false;
@@ -220,40 +218,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gameTitleEl.textContent = 'Познай КАРТИНКАТА!';
         controlsEl.classList.add('hidden');
-        containerEl.classList.add('hidden');
-        optionsContainer.classList.remove('hidden');
-        showMessage('', 'info');
-    }
-    
-    async function initializeApp() {
-        document.body.classList.add('bg-menu');
-        try {
-            const response = await fetch('themes.json');
-            if (!response.ok) {
-                throw new Error(`Грешка при зареждане на мрежата: ${response.statusText}`);
-            }
-            ALL_THEMES = await response.json();
-
-            themeRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
-            countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
-            startGameBtn.addEventListener('click', startGame);
-            startBtn.addEventListener('click', hideRandomPicture);
-            reloadBtn.addEventListener('click', () => {
-                renderGamePics();
-                resetGameState();
-            });
-            backToMenuBtn.addEventListener('click', goBackToMenu);
-
-            updateStartButtonState();
-            // Проверяваме за отключени теми при стартиране на приложението
-            checkAndUnlockThemes();
-            
-        } catch (error) {
-            console.error("Неуспешно зареждане на темите:", error);
-            gameTitleEl.textContent = 'ГРЕШКА';
-            optionsContainer.innerHTML = `<p style="color: var(--error-color);">Нещо се обърка при зареждането на темите за играта. Моля, опитайте да презаредите страницата.</p>`;
-        }
-    }
-
-    initializeApp();
-});
+        containerEl.classList.add
