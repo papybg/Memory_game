@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Познай КАРТИНКАТА!</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.7">
 </head>
 <body>
     
@@ -16,12 +16,11 @@
             <legend class="option-line-1">Избери тема:</legend>
             <div id="themeOptions">
                 <label><input type="radio" name="theme" value="превозни_средства"> Превозни средства</label>
-                <label><input type="radio" name="theme" value="animals"> Животни</label>
-                <label><input type="radio" name="theme" value="flowers"> Цветя</label>
-                <label class="disabled-theme"><input type="radio" name="theme" value="птици" disabled> Птици 🔒</label>
+                <label class="theme-animals"><input type="radio" name="theme" value="animals"> Животни</label>
+                <label class="theme-flowers"><input type="radio" name="theme" value="flowers"> Цветя</label>
+                <label id="birdsThemeLabel" class="theme-locked"><input type="radio" name="theme" value="птици" id="birdsThemeRadio" disabled> Птици</label>
             </div>
         </fieldset>
-        
         <fieldset>
             <legend class="option-line-2">Избери брой картинки:</legend>
             <div id="countOptions">
@@ -31,16 +30,15 @@
                 <label><input type="radio" name="count" value="5"> 5</label>
             </div>
         </fieldset>
-
-        <button id="startGameBtn" disabled class="option-line-3">Започни играта</button> 
+        <button id="startGameBtn" disabled class="option-line-3 game-btn">Започни играта</button> 
     </div>
 
-    <div id="gameMessage"></div>
-    
+    <div id="gameMessage" class="message-hidden"></div>
+
     <div id="controls" class="hidden">
-        <button id="start">СКРИЙ КАРТИНА</button>
-        <button id="reload" class="hidden">НОВА ИГРА</button>
-        <button id="backToMenu">ОБРАТНО В МЕНЮТО</button>
+        <button id="start" class="game-btn">СКРИЙ КАРТИНА</button>
+        <button id="reload" class="game-btn hidden">НОВА ИГРА</button>
+        <button id="backToMenu" class="game-btn">ОБРАТНО В МЕНЮТО</button>
     </div>
 
     <div id="container" class="hidden">
@@ -48,6 +46,6 @@
         <div id="allPics" class="game-section"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=1.7"></script>
 </body>
 </html>
