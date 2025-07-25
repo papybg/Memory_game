@@ -167,8 +167,8 @@ body {
 /* Старият стил за #gamePics img е премахнат и е заменен с този нов блок */
 .game-card {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 }
 
