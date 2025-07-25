@@ -14,7 +14,6 @@
     --success-color: #28a745;
     --error-color: #dc3545;
 }
-/*========*/
 
 body {
     font-family: Arial, sans-serif;
@@ -164,27 +163,45 @@ body {
   min-height: 180px;
 }
 
-#gamePics img {
-  width: 180px;
-  height: 180px;
-  object-fit: contain;
-  object-position: center;
-  cursor: pointer;
-  border: 2px solid var(--border-color-dark);
-  border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 1.5s ease-in-out;
+/* --- ТУК Е ЕДИНСТВЕНАТА ПРОМЯНА --- */
+/* Старият стил за #gamePics img е премахнат и е заменен с този нов блок */
+.game-card {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    cursor: pointer;
 }
 
-#gamePics img:hover,
-#gamePics img:focus {
+.game-card .card-image,
+.game-card .card-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border: 2px solid var(--border-color-dark);
+    border-radius: 10px;
+    background-color: #fff;
+    transition: opacity 1.5s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-card:hover .card-image,
+.game-card:focus .card-image {
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
   outline: none;
 }
 
-.fading-out {
-    opacity: 0;
+.is-visible {
+    opacity: 1;
 }
+
+.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+/* ------------------------------------ */
 
 #allPics {
   display: flex;
@@ -215,14 +232,13 @@ body {
   outline: none;
 }
 
-/* <<< ПРОМЯНА ОТ ТОЧКА 1 ТУК >>> */
 #optionsContainer {
     display: flex;
     flex-direction: column;
-    gap: 25px; /* Увеличено от 15px */
+    gap: 25px;
     margin: 1rem auto;
     font-size: 1.1rem;
-    padding: 35px; /* Увеличено от 25px */
+    padding: 35px;
     border: 1px solid var(--border-color-light);
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.9);
@@ -293,13 +309,13 @@ body {
 @media (max-width: 768px) {
   #gameTitle { font-size: 4.5rem; }
   #gameTitle.title-long { font-size: 3.5rem; }
-  #gamePics img { width: 150px; height: 150px; }
+  .game-card { width: 150px; height: 150px; } /* Промяна от #gamePics img */
   #allPics img { width: 100px; height: 100px; }
 }
 
 @media (max-width: 480px) {
   #gameTitle { font-size: 3.2rem; }
   #gameTitle.title-long { font-size: 2.5rem; }
-  #gamePics img { width: 70px; height: 70px; }
+  .game-card { width: 70px; height: 70px; } /* Промяна от #gamePics img */
   #allPics img { width: 50px; height: 50px; }
 }
