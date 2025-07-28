@@ -1,35 +1,35 @@
 {
-  "превозни_средства": [
-    { "image": "cars/bus.jpg", "sound": "cars/bus_sound.wav" },
-    { "image": "cars/airplane.jpg", "sound": "cars/airplane_sound.wav" },
-    { "image": "cars/firetruck.jpg", "sound": "cars/firetruck_sound.wav" },
-    { "image": "cars/train.jpg", "sound": "cars/train_sound.wav" },
-    { "image": "cars/truck.jpg", "sound": "cars/truck_sound.wav" }
-  ]
-  "animals": [
-    { "image": "animals/dog.jpg", "sound": "animals/dog.mp3" },
-    { "image": "animals/cat.jpg", "sound": "animals/cat.mp3" },
-    { "image": "animals/lion.jpg", "sound": "animals/Leon.mp3" },
-    { "image": "animals/elephant.jpg", "sound": "animals/elephant.mp3" },
-    { "image": "animals/monkey.jpg", "sound": "animals/monkey.mp3" }
-    { "image": "animals/tiger.png", "sound": "animals/monkey.mp3" }
-    { "image": "animals/wolf.png", "sound": "animals/monkey.mp3" }
-  ]
-  "flowers": [
-    { "image": "flovers/rose.jpg", "sound": "flovers/tada_sound.wav" },
-    { "image": "flovers/tulip.jpg", "sound": "flovers/tada_sound.wav" },
-    { "image": "flovers/lily.jpg", "sound": "flovers/tada_sound.wav" },
-    { "image": "flovers/daisy.jpg", "sound": "flovers/tada_sound.wav" },
-    { "image": "flovers/sunflower.jpg", "sound": "flovers/tada_sound.wav" }
-  ]
-  "птици": [
-    { "image": "birds/chicken.jpg", "sound": "birds/chicken.wav" },
-    { "image": "birds/crow.png", "sound": "birds/crow.wav" },
-    { "image": "birds/duck.png", "sound": "birds/duck.wav" },
-    { "image": "birds/dove.png", "sound": "birds/dove.wav" },
-    { "image": "birds/falcon.png", "sound": "birds/falcon.wav" }
-    { "image": "birds/robin.png", "sound": "birds/robin.wav" }
-    { "image": "birds/rooster.png", "sound": "birds/rooster.wav" }
-    { "image": "birds/turkey.png", "sound": "birds/turkey.wav" }
-  ]
+    "превозни_средства": [
+        { "image": "cars/bus.jpg", "sound": "cars/bus_sound.wav" },
+        { "image": "cars/airplane.jpg", "sound": "cars/airplane_sound.wav" },
+        { "image": "cars/firetruck.jpg", "sound": "cars/firetruck_sound.wav" },
+        { "image": "cars/train.jpg", "sound": "cars/train_sound.wav" },
+        { "image": "cars/truck.jpg", "sound": "cars/truck_sound.wav" }
+    ],
+    "animals": [
+        { "image": "animals/dog.jpg", "sound": "animals/dog.mp3" },
+        { "image": "animals/cat.jpg", "sound": "animals/cat.mp3" },
+        { "image": "animals/lion.jpg", "sound": "animals/Leon.mp3" },
+        { "image": "animals/elephant.jpg", "sound": "animals/elephant.mp3" },
+        { "image": "animals/monkey.jpg", "sound": "animals/monkey.mp3" },
+        { "image": "animals/tiger.png", "sound": "animals/monkey.mp3" },
+        { "image": "animals/wolf.png", "sound": "animals/monkey.mp3" }
+    ],
+    "flowers": [
+        { "image": "flowers/rose.jpg", "sound": "flowers/tada_sound.wav" },
+        { "image": "flowers/tulip.jpg", "sound": "flowers/tada_sound.wav" },
+        { "image": "flowers/lily.jpg", "sound": "flowers/tada_sound.wav" },
+        { "image": "flowers/daisy.jpg", "sound": "flowers/tada_sound.wav" },
+        { "image": "flowers/sunflower.jpg", "sound": "flowers/tada_sound.wav" }
+    ],
+    "птици": [
+        { "image": "birds/chicken.jpg", "sound": "birds/chicken.wav" },
+        { "image": "birds/crow.png", "sound": "birds/crow.wav" },
+        { "image": "birds/duck.png", "sound": "birds/duck.wav" },
+        { "image": "birds/dove.png", "sound": "birds/dove.wav" },
+        { "image": "birds/falcon.png", "sound": "birds/falcon.wav" },
+        { "image": "birds/robin.png", "sound": "birds/robin.wav" },
+        { "image": "birds/rooster.png", "sound": "birds/rooster.wav" },
+        { "image": "birds/turkey.png", "sound": "birds/turkey.wav" }
+    ]
 }
