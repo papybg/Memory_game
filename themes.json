@@ -5,7 +5,7 @@
     { "image": "cars/firetruck.jpg", "sound": "cars/firetruck_sound.wav" },
     { "image": "cars/train.jpg", "sound": "cars/train_sound.wav" },
     { "image": "cars/truck.jpg", "sound": "cars/truck_sound.wav" }
-  ],
+  ]
   "animals": [
     { "image": "animals/dog.jpg", "sound": "animals/dog.mp3" },
     { "image": "animals/cat.jpg", "sound": "animals/cat.mp3" },
@@ -14,7 +14,7 @@
     { "image": "animals/monkey.jpg", "sound": "animals/monkey.mp3" }
     { "image": "animals/tiger.png", "sound": "animals/monkey.mp3" }
     { "image": "animals/wolf.png", "sound": "animals/monkey.mp3" }
-  ],
+  ]
   "flowers": [
     { "image": "flovers/rose.jpg", "sound": "flovers/tada_sound.wav" },
     { "image": "flovers/tulip.jpg", "sound": "flovers/tada_sound.wav" },
