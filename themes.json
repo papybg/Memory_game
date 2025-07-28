@@ -21,7 +21,7 @@
     { "image": "flovers/lily.jpg", "sound": "flovers/tada_sound.wav" },
     { "image": "flovers/daisy.jpg", "sound": "flovers/tada_sound.wav" },
     { "image": "flovers/sunflower.jpg", "sound": "flovers/tada_sound.wav" }
-  ],
+  ]
   "птици": [
     { "image": "birds/chicken.jpg", "sound": "birds/chicken.wav" },
     { "image": "birds/crow.png", "sound": "birds/crow.wav" },
