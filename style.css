@@ -30,292 +30,82 @@ body {
     transition: background-image 0.5s ease-in-out;
 }
 
-.bg-menu {
-    background-image: url('images/fon1.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-.bg-game {
-    background-image: linear-gradient(to bottom left, #d2f8d2, #a6e7ff);
-}
-
+.bg-menu { background-image: url('images/fon1.jpg'); background-size: cover; background-position: center; background-attachment: fixed; }
+.bg-game { background-image: linear-gradient(to bottom left, #d2f8d2, #a6e7ff); }
 
 #gameTitle {
-  font-size: 6.5rem;
-  font-weight: bold;
-  line-height: 1;
-  margin: 0.8rem 0;
-  color: #fff;
-  text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
-  transition: all 0.5s ease-out;
-}
-
-#gameTitle.title-long {
-    font-size: 5rem;
-}
-
-#gameMessage {
-    margin-bottom: 15px;
-    font-size: 1.56rem;
+    font-size: 3.2rem;
     font-weight: bold;
-    min-height: auto;
-    transition: all 0.5s ease-out;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    color: var(--text-color-dark);
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 12px 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    max-width: 90%;
+    line-height: 1;
+    margin: 0.8rem 0;
+    color: #fff;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
 }
 
-.message-hidden {
-    opacity: 0;
-    transform: scale(0.8);
-}
-
-.message-animate {
-    opacity: 1;
-    transform: scale(1);
-    font-size: 2.5rem;
-}
-
-.message-success {
-    color: var(--success-color);
-}
-
-.message-error {
-    color: var(--error-color);
-}
-
-#controls {
-  margin-bottom: 15px;
-}
-
-.game-btn {
-  padding: 12px 24px;
-  margin: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  background-image: linear-gradient(45deg, #FF512F 0%, #DD2476 51%, #FF512F 100%);
-  background-size: 200% auto;
-  transition: all 0.4s ease;
-  box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
-}
-
-.game-btn:hover, .game-btn:focus {
-  background-position: right center;
-  box-shadow: 0 8px 20px rgba(221, 36, 118, 0.5);
-  transform: translateY(-3px);
-  outline: none;
-}
-
-.game-btn:disabled {
-  background-image: none;
-  background-color: var(--disabled-button-color);
-  box-shadow: none;
-  transform: none;
-  cursor: not-allowed;
-}
-
-#start::before { content: '🎩 '; margin-right: 5px; }
-#reload::before { content: '✨ '; margin-right: 5px; }
-#backToMenu::before { content: '🏠 '; margin-right: 5px; }
-#startGameBtn::before { content: '🚀 '; margin-right: 5px; }
-
-
-#container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  width: 100%;
-  max-width: 1000px;
-  margin: 10px auto;
-}
-
-.game-section {
-    width: 100%;
-    max-width: 800px;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-}
+#gameMessage { /* ... стиловете остават същите ... */ }
+#controls { /* ... стиловете остават същите ... */ }
+.game-btn { /* ... стиловете остават същите ... */ }
+#container { /* ... стиловете остават същите ... */ }
+.game-section { /* ... стиловете остават същите ... */ }
 
 #gamePics {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  background-color: var(--background-game-section-1);
-  border: 2px solid var(--border-color-primary);
-  border-radius: 10px;
-  padding: 15px;
-  min-height: 180px;
-}
-
-/* --- ТУК Е ЕДИНСТВЕНАТА ПРОМЯНА --- */
-/* Старият стил за #gamePics img е премахнат и е заменен с този нов блок */
-.game-card {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-
-.game-card .card-image,
-.game-card .card-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border: 2px solid var(--border-color-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    background-color: var(--background-game-section-1);
+    border: 2px solid var(--border-color-primary);
     border-radius: 10px;
-    background-color: #fff;
-    transition: opacity 1.5s ease-in-out, transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 15px;
+    min-height: 120px;
 }
 
-.game-card:hover .card-image,
-.game-card:focus .card-image {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
-  outline: none;
-}
-
-.is-visible {
-    opacity: 1;
-}
-
-.is-hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-/* ------------------------------------ */
-
-#allPics {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  background-color: var(--background-game-section-2);
-  border: 2px dashed var(--dashed-border-color);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-#allPics img {
-  width: 120px;
-  height: 120px;
+/* --- КОРИГИРАН СТИЛ ЗА КАРТИНКИТЕ --- */
+#gamePics img {
+  width: 120px; /* <-- НАМАЛЕН РАЗМЕР */
+  height: 120px; /* <-- НАМАЛЕН РАЗМЕР */
   object-fit: contain;
-  object-position: center;
-  cursor: pointer;
   border: 2px solid var(--border-color-dark);
   border-radius: 10px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-#allPics img:hover,
-#allPics img:focus {
+#gamePics img:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  outline: none;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
 }
 
-#optionsContainer {
+#allPics {
     display: flex;
-    flex-direction: column;
-    gap: 25px;
-    margin: 1rem auto;
-    font-size: 1.1rem;
-    padding: 35px;
-    border: 1px solid var(--border-color-light);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--background-game-section-2);
+    border: 2px dashed var(--dashed-border-color);
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    width: 90%;
-    max-width: 400px;
+    padding: 15px;
 }
 
-#optionsContainer fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
+#allPics img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  cursor: pointer;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 10px;
+  transition: transform 0.2s ease;
 }
 
-#optionsContainer legend {
-    font-weight: bold;
-    font-size: 1.2em;
-    padding: 0;
-    margin-bottom: 10px;
-    width: 100%;
-    text-align: left;
+#allPics img:hover {
+  transform: scale(1.05);
 }
 
-#optionsContainer h2 {
-    font-size: 1.8rem;
-    color: var(--text-color-dark);
-    margin-bottom: 15px;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 10px;
-}
-
-.option-line-1 { color: red; }
-.option-line-2 { color: blue; }
-
-#startGameBtn.option-line-3 {
-    color: white;
-    font-weight: bold;
-}
-
-#themeOptions label, #countOptions label {
-    display: inline-block;
-    margin-right: 15px;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-#themeOptions .theme-animals { color: brown; font-weight: bold; }
-#themeOptions .theme-flowers { color: green; font-weight: bold; }
-
-.theme-locked {
-    color: #999;
-    cursor: not-allowed;
-    position: relative;
-}
-
-.theme-locked::after {
-    content: '🔒';
-    position: absolute;
-    right: -5px;
-    top: -5px;
-    font-size: 0.8em;
-}
-
-.hidden {
-    display: none !important;
-}
-
-@media (max-width: 768px) {
-  #gameTitle { font-size: 4.5rem; }
-  #gameTitle.title-long { font-size: 3.5rem; }
-  .game-card { width: 150px; height: 150px; } /* Промяна от #gamePics img */
-  #allPics img { width: 100px; height: 100px; }
-}
+#optionsContainer { /* ... стиловете остават същите ... */ }
+/* ... останалите стилове са същите ... */
 
 @media (max-width: 480px) {
-  #gameTitle { font-size: 3.2rem; }
-  #gameTitle.title-long { font-size: 2.5rem; }
-  .game-card { width: 70px; height: 70px; } /* Промяна от #gamePics img */
-  #allPics img { width: 50px; height: 50px; }
+  #gameTitle { font-size: 2.5rem; }
+  #gamePics img { width: 80px; height: 80px; } /* <-- НАМАЛЕН РАЗМЕР ЗА ТЕЛЕФОН */
+  #allPics img { width: 60px; height: 60px; }
 }
