@@ -12,8 +12,8 @@
         { "id": "lion", "name": "Лъв", "image": "images/animals/lion.jpg", "sound": "audio/animals/Leon.mp3" },
         { "id": "elephant", "name": "Слон", "image": "images/animals/elephant.jpg", "sound": "audio/animals/elephant.mp3" },
         { "id": "monkey", "name": "Маймуна", "image": "images/animals/monkey.jpg", "sound": "audio/animals/monkey.mp3" },
-        { "id": "tiger", "name": "Тигър", "image": "images/animals/tiger.png", "sound": "audio/animals/tiger_sound.mp3" },
-        { "id": "wolf", "name": "Вълк", "image": "images/animals/wolf.png", "sound": "audio/animals/wolf_sound.mp3" }
+        { "id": "tiger", "name": "Тигър", "image": "images/animals/tiger.png", "sound": "audio/animals/tiger.mp3" },
+        { "id": "wolf", "name": "Вълк", "image": "images/animals/wolf.png", "sound": "audio/animals/wolf.mp3" }
     ],
     "flowers": [
         { "id": "rose", "name": "Роза", "image": "images/flowers/rose.jpg", "sound": "audio/flowers/tada_sound.wav" },
@@ -23,7 +23,7 @@
         { "id": "sunflower", "name": "Слънчоглед", "image": "images/flowers/sunflower.jpg", "sound": "audio/flowers/tada_sound.wav" }
     ],
     "птици": [
-        { "id": "chicken", "name": "Кокошка", "image": "images/birds/chicken.jpg", "sound": "audio/birds/chicken.mp3" },
+        { "id": "chicken", "name": "Кокошка", "image": "images/birds/chicken.png", "sound": "audio/birds/chicken.mp3" },
         { "id": "crow", "name": "Врана", "image": "images/birds/crow.png", "sound": "audio/birds/crow.mp3" },
         { "id": "duck", "name": "Патица", "image": "images/birds/duck.png", "sound": "audio/birds/duck.mp3" },
         { "id": "dove", "name": "Гълъб", "image": "images/birds/dove.png", "sound": "audio/birds/dove.mp3" },
