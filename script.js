@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             themeRadios.forEach(r => r.addEventListener('change', () => {
                 updateCountOptionsAvailability();
-                updateStartButtonState();
+                updateStartButtonState, 50);
             }));
             countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             startGameBtn.addEventListener('click', startGame);
