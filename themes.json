@@ -23,13 +23,13 @@
         { "id": "sunflower", "name": "Слънчоглед", "image": "images/flowers/sunflower.jpg", "sound": "audio/flowers/tada_sound.wav" }
     ],
     "птици": [
-        { "id": "chicken", "name": "Кокошка", "image": "images/birds/chicken.jpg", "sound": "audio/birds/chicken.wav" },
-        { "id": "crow", "name": "Врана", "image": "images/birds/crow.png", "sound": "audio/birds/crow.wav" },
-        { "id": "duck", "name": "Патица", "image": "images/birds/duck.png", "sound": "audio/birds/duck.wav" },
-        { "id": "dove", "name": "Гълъб", "image": "images/birds/dove.png", "sound": "audio/birds/dove.wav" },
-        { "id": "falcon", "name": "Сокол", "image": "images/birds/falcon.png", "sound": "audio/birds/falcon.wav" },
-        { "id": "robin", "name": "Червеношийка", "image": "images/birds/robin.png", "sound": "audio/birds/robin.wav" },
-        { "id": "rooster", "name": "Петел", "image": "images/birds/rooster.png", "sound": "audio/birds/rooster.wav" },
-        { "id": "turkey", "name": "Пуйка", "image": "images/birds/turkey.png", "sound": "audio/birds/turkey.wav" }
+        { "id": "chicken", "name": "Кокошка", "image": "images/birds/chicken.jpg", "sound": "audio/birds/chicken.mp3" },
+        { "id": "crow", "name": "Врана", "image": "images/birds/crow.png", "sound": "audio/birds/crow.mp3" },
+        { "id": "duck", "name": "Патица", "image": "images/birds/duck.png", "sound": "audio/birds/duck.mp3" },
+        { "id": "dove", "name": "Гълъб", "image": "images/birds/dove.png", "sound": "audio/birds/dove.mp3" },
+        { "id": "falcon", "name": "Сокол", "image": "images/birds/falcon.png", "sound": "audio/birds/falcon.mp3" },
+        { "id": "robin", "name": "Червеношийка", "image": "images/birds/robin.png", "sound": "audio/birds/robin.mp3" },
+        { "id": "rooster", "name": "Петел", "image": "images/birds/rooster.png", "sound": "audio/birds/rooster.mp3" },
+        { "id": "turkey", "name": "Пуйка", "image": "images/birds/turkey.png", "sound": "audio/birds/turkey.mp3" }
     ]
 }
