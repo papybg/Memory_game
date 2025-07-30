@@ -4,7 +4,7 @@
         { "id": "airplane", "name": "Самолет", "image": "images/cars/airplane.jpg", "sound": "audio/cars/airplane_sound.wav" },
         { "id": "firetruck", "name": "Пожарна", "image": "images/cars/firetruck.jpg", "sound": "audio/cars/firetruck_sound.wav" },
         { "id": "train", "name": "Влак", "image": "images/cars/train.jpg", "sound": "audio/cars/train_sound.wav" },
-        { "id": "truck", "name": "Камион", "image": "images/cars/truck.jpg", "sound": "audio/cars/truck_sound.wav" }
+        { "id": "truck", "name": "Камион", "image": "images/cars/truck.jpg", "sound": "audio/cars/truck-horn.mp3" }
     ],
     "animals": [
         { "id": "dog", "name": "Куче", "image": "images/animals/dog.jpg", "sound": "audio/animals/dog.mp3" },
