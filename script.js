@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- КОНФИГУРАЦИЯ ---
     const GAMES_TO_UNLOCK = 15;
     let ALL_THEMES = {};
 
-    // --- DOM ЕЛЕМЕНТИ ---
     const themeRadios = document.querySelectorAll('input[name="theme"]');
     const countRadios = document.querySelectorAll('input[name="count"]');
     const startGameBtn = document.getElementById('startGameBtn');
@@ -20,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
 
-    // --- СЪСТОЯНИЕ НА ИГРАТА ---
     const gameState = {
         currentThemeData: [],
         numberOfPics: 0,
@@ -29,11 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice: false,
     };
 
-    // --- АУДИО ---
     const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
-    // --- ФУНКЦИИ ---
     function checkUnlockStatus() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         if (gamesPlayed >= GAMES_TO_UNLOCK) {
@@ -73,19 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCountOptionsAvailability() {
         const selectedThemeKey = document.querySelector('input[name="theme"]:checked')?.value;
         if (!selectedThemeKey || !ALL_THEMES[selectedThemeKey]) return;
-
         const maxPicsInTheme = ALL_THEMES[selectedThemeKey].length;
         countRadios.forEach(radio => {
             const label = radio.closest('label');
             if (parseInt(radio.value) > maxPicsInTheme) {
                 radio.disabled = true;
-                label.classList.add('disabled-theme');
+                if(label) label.classList.add('disabled-theme');
             } else {
                 radio.disabled = false;
-                label.classList.remove('disabled-theme');
+                if(label) label.classList.remove('disabled-theme');
             }
         });
-
         const currentSelectedCount = document.querySelector('input[name="count"]:checked');
         if (currentSelectedCount && currentSelectedCount.disabled) {
             const lastEnabledRadio = [...countRadios].reverse().find(r => !r.disabled);
@@ -102,20 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function startGame() {
         document.body.classList.remove('bg-menu');
         document.body.classList.add('bg-game');
-
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
-        const themeLabel = document.querySelector(`label[for="${selectedTheme}"]`) || document.querySelector(`input[value="${selectedTheme}"]`).closest('label');
+        const themeLabel = document.querySelector(`input[value="${selectedTheme}"]`).closest('label');
         const themeDisplayName = themeLabel.textContent.replace(/🔒|✔️/g, '').trim();
-
         gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
         gameState.currentThemeData = ALL_THEMES[selectedTheme];
-
         gameTitleEl.innerHTML = `Познай<br>${themeDisplayName.toUpperCase()}!`;
-        
         optionsContainer.classList.add('hidden');
         controlsEl.classList.remove('hidden');
         containerEl.classList.remove('hidden');
-
         renderGamePics();
         renderAllPics();
         resetGameState();
@@ -128,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             img.src = item.image;
             img.dataset.id = item.id;
             img.alt = item.name;
-            img.addEventListener('click', chooseHandler);
+            img.addEventListener('click', () => chooseHandler(item.id));
             allPicsEl.appendChild(img);
         });
     }
@@ -137,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         gamePicsEl.innerHTML = '';
         const shuffledItems = shuffleArray([...gameState.currentThemeData]);
         gameState.selectedGameItems = shuffledItems.slice(0, gameState.numberOfPics);
-
         gameState.selectedGameItems.forEach((item) => {
             const img = document.createElement('img');
             img.src = item.image;
@@ -150,43 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideRandomPicture() {
         if (gameState.awaitingChoice) return;
         restoreHiddenImage();
-
         const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
         const allGameImages = gamePicsEl.querySelectorAll('img');
         if (allGameImages.length === 0) return;
         const hiddenImageElement = allGameImages[hiddenIndex];
-        
         gameState.hiddenItem = gameState.selectedGameItems[hiddenIndex];
         gameState.hiddenItem.element = hiddenImageElement;
-
         hiddenImageElement.src = 'images/hide.png';
         hiddenImageElement.alt = 'Скрита картинка';
-        
         gameState.awaitingChoice = true;
         startBtn.classList.add('hidden');
         showMessage('Познай кое липсва!');
     }
 
-    function chooseHandler(e) {
+    function chooseHandler(chosenId) {
         if (!gameState.awaitingChoice) return;
-
-        const chosenId = e.target.dataset.id;
         const hiddenId = gameState.hiddenItem.id;
-
         if (chosenId === hiddenId) {
             restoreHiddenImage();
-            
             const itemSound = new Audio(gameState.hiddenItem.sound);
             itemSound.play().catch(err => console.error("Грешка при пускане на звук:", err));
-            itemSound.onended = () => {
+            setTimeout(() => {
                 bravoAudio.currentTime = 0;
                 bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
-            };
-            itemSound.onerror = () => {
-                bravoAudio.currentTime = 0;
-                bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
-            };
-
+            }, 800);
             showMessage('Браво!', 'success');
             incrementGamesPlayed();
             gameState.awaitingChoice = false;
@@ -245,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             themeRadios.forEach(r => r.addEventListener('change', () => {
                 updateCountOptionsAvailability();
-                updateStartButtonState, 50);
+                setTimeout(updateStartButtonState, 50); // Коригирана грешка
             }));
             countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             startGameBtn.addEventListener('click', startGame);
@@ -261,6 +235,5 @@ document.addEventListener('DOMContentLoaded', () => {
             optionsContainer.innerHTML = `<p style="color: var(--error-color);">Грешка при зареждане на темите. Моля, проверете дали файлът 'themes.json' е наличен и синтактично коректен.</p>`;
         }
     }
-
     initializeApp();
 });
