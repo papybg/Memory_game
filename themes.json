@@ -1,9 +1,9 @@
 {
     "превозни_средства": [
         { "id": "bus", "name": "Автобус", "image": "images/cars/bus.jpg", "sound": "audio/cars/bus.mp3" },
-        { "id": "airplane", "name": "Самолет", "image": "images/cars/airplane.jpg", "sound": "audio/cars/airplane_sound.wav" },
-        { "id": "firetruck", "name": "Пожарна", "image": "images/cars/firetruck.jpg", "sound": "audio/cars/firetruck_sound.wav" },
-        { "id": "train", "name": "Влак", "image": "images/cars/train.jpg", "sound": "audio/cars/train_sound.wav" },
+        { "id": "airplane", "name": "Самолет", "image": "images/cars/airplane.jpg", "sound": "audio/cars/airplane.mp3" },
+        { "id": "firetruck", "name": "Пожарна", "image": "images/cars/firetruck.jpg", "sound": "audio/cars/firetruck.mp3" },
+        { "id": "train", "name": "Влак", "image": "images/cars/train.jpg", "sound": "audio/cars/train.mp3" },
         { "id": "truck", "name": "Камион", "image": "images/cars/truck.jpg", "sound": "audio/cars/truck-horn.mp3" }
     ],
     "animals": [
