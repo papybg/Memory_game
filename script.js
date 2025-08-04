@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- КОНФИГУРАЦИЯ ---
     const GAMES_TO_UNLOCK = 15;
     let ALL_THEMES = {};
 
+    // --- DOM ЕЛЕМЕНТИ ---
     const themeRadios = document.querySelectorAll('input[name="theme"]');
     const countRadios = document.querySelectorAll('input[name="count"]');
     const startGameBtn = document.getElementById('startGameBtn');
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
 
+    // --- СЪСТОЯНИЕ НА ИГРАТА ---
     const gameState = {
         currentThemeData: [],
         numberOfPics: 0,
@@ -26,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
         awaitingChoice: false,
     };
 
+    // --- АУДИО ---
     const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
 
+    // --- ФУНКЦИИ ---
     function checkUnlockStatus() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         if (gamesPlayed >= GAMES_TO_UNLOCK) {
@@ -150,90 +155,22 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('Познай кое липсва!');
     }
 
+    // 👇👇👇 КОРЕКЦИЯ #1 - Логика за звука 👇👇👇
     function chooseHandler(chosenId) {
         if (!gameState.awaitingChoice) return;
         const hiddenId = gameState.hiddenItem.id;
+
         if (chosenId === hiddenId) {
             restoreHiddenImage();
-            const itemSound = new Audio(gameState.hiddenItem.sound);
-            itemSound.play().catch(err => console.error("Грешка при пускане на звук:", err));
-            setTimeout(() => {
+            
+            const itemSoundPath = gameState.hiddenItem.sound;
+            const playBravo = () => {
                 bravoAudio.currentTime = 0;
                 bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
-            }, 800);
-            showMessage('Браво!', 'success');
-            incrementGamesPlayed();
-            gameState.awaitingChoice = false;
-            reloadBtn.classList.remove('hidden');
-            startBtn.classList.add('hidden');
-        } else {
-            opitaiPakAudio.currentTime = 0;
-            opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
-            showMessage('Опитай пак!', 'error');
-        }
-    }
+            };
 
-    function showMessage(text, type = 'info') {
-        messageDisplay.classList.remove('message-hidden');
-        messageDisplay.textContent = text;
-        messageDisplay.className = 'gameMessage';
-        setTimeout(() => {
-            messageDisplay.classList.add('message-animate', `message-${type}`);
-        }, 10);
-    }
-
-    function restoreHiddenImage() {
-        if (gameState.hiddenItem && gameState.hiddenItem.element) {
-            const el = gameState.hiddenItem.element;
-            el.src = gameState.hiddenItem.image;
-            el.alt = gameState.hiddenItem.name;
-        }
-    }
-
-    function resetGameState() {
-        restoreHiddenImage();
-        gameState.awaitingChoice = false;
-        gameState.hiddenItem = null;
-        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.');
-        reloadBtn.classList.add('hidden');
-        startBtn.classList.remove('hidden');
-    }
-
-    function goBackToMenu() {
-        document.body.classList.remove('bg-game');
-        document.body.classList.add('bg-menu');
-        gameTitleEl.innerHTML = 'Познай<br>КАРТИНКАТА!';
-        controlsEl.classList.add('hidden');
-        containerEl.classList.add('hidden');
-        optionsContainer.classList.remove('hidden');
-        showMessage('');
-        messageDisplay.classList.add('message-hidden');
-    }
-    
-    async function initializeApp() {
-        document.body.classList.add('bg-menu');
-        try {
-            const response = await fetch('themes.json');
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            ALL_THEMES = await response.json();
-
-            themeRadios.forEach(r => r.addEventListener('change', () => {
-                updateCountOptionsAvailability();
-                setTimeout(updateStartButtonState, 50); // Коригирана грешка
-            }));
-            countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
-            startGameBtn.addEventListener('click', startGame);
-            startBtn.addEventListener('click', hideRandomPicture);
-            reloadBtn.addEventListener('click', startGame);
-            backToMenuBtn.addEventListener('click', goBackToMenu);
-
-            checkUnlockStatus();
-            updateCountOptionsAvailability();
-            updateStartButtonState();
-        } catch (error) {
-            console.error("Неуспешно зареждане или парсване на themes.json:", error);
-            optionsContainer.innerHTML = `<p style="color: var(--error-color);">Грешка при зареждане на темите. Моля, проверете дали файлът 'themes.json' е наличен и синтактично коректен.</p>`;
-        }
-    }
-    initializeApp();
-});
+            if (itemSoundPath) {
+                const itemSound = new Audio(itemSoundPath);
+                itemSound.play().catch(err => {
+                    console.error("Грешка при пускане на звук на обект:", err);
+                    playBra
