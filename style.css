@@ -1,3 +1,4 @@
+/* 🌟 Основни стилове и CSS променливи */
 :root {
     --primary-color: #007bff;
     --primary-hover-focus-color: #0056b3;
@@ -37,6 +38,7 @@ body {
     text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
 }
 
+/* --- ТУК Е КОРЕКЦИЯТА --- */
 #gameMessage {
     margin-bottom: 15px;
     font-size: 1.5rem;
@@ -49,12 +51,22 @@ body {
     padding: 12px 20px;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    max-width: 90%;
-    opacity: 0;
-    transform: scale(0.8);
+    /* display, opacity и transform са премахнати оттук */
 }
-.message-animate { opacity: 1; transform: scale(1); }
+
+/* Нов клас за скриване */
+.message-hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+.message-animate {
+    display: inline-block; /* Показваме елемента */
+    opacity: 1;
+    transform: scale(1);
+}
+/* -------------------------- */
+
 .message-success { color: var(--success-color); }
 .message-error { color: var(--error-color); }
 
