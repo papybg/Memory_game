@@ -155,22 +155,96 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('Познай кое липсва!');
     }
 
-    // 👇👇👇 КОРЕКЦИЯ #1 - Логика за звука 👇👇👇
     function chooseHandler(chosenId) {
         if (!gameState.awaitingChoice) return;
         const hiddenId = gameState.hiddenItem.id;
-
         if (chosenId === hiddenId) {
             restoreHiddenImage();
-            
-            const itemSoundPath = gameState.hiddenItem.sound;
             const playBravo = () => {
                 bravoAudio.currentTime = 0;
                 bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
             };
-
+            const itemSoundPath = gameState.hiddenItem.sound;
             if (itemSoundPath) {
                 const itemSound = new Audio(itemSoundPath);
                 itemSound.play().catch(err => {
                     console.error("Грешка при пускане на звук на обект:", err);
-                    playBra
+                    playBravo();
+                });
+                itemSound.onended = playBravo;
+            } else {
+                playBravo();
+            }
+            showMessage('Браво!', 'success');
+            incrementGamesPlayed();
+            gameState.awaitingChoice = false;
+            reloadBtn.classList.remove('hidden');
+            startBtn.classList.add('hidden');
+        } else {
+            opitaiPakAudio.currentTime = 0;
+            opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
+            showMessage('Опитай пак!', 'error');
+        }
+    }
+
+    function showMessage(text, type = 'info') {
+        messageDisplay.className = 'gameMessage';
+        messageDisplay.textContent = text;
+        setTimeout(() => {
+            messageDisplay.classList.add('message-animate', `message-${type}`);
+        }, 10);
+    }
+
+    function restoreHiddenImage() {
+        if (gameState.hiddenItem && gameState.hiddenItem.element) {
+            const el = gameState.hiddenItem.element;
+            el.src = gameState.hiddenItem.image;
+            el.alt = gameState.hiddenItem.name;
+        }
+    }
+
+    function resetGameState() {
+        restoreHiddenImage();
+        gameState.awaitingChoice = false;
+        gameState.hiddenItem = null;
+        showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.');
+        reloadBtn.classList.add('hidden');
+        startBtn.classList.remove('hidden');
+    }
+
+    function goBackToMenu() {
+        document.body.classList.remove('bg-game');
+        document.body.classList.add('bg-menu');
+        gameTitleEl.innerHTML = 'Познай<br>КАРТИНКАТА!';
+        controlsEl.classList.add('hidden');
+        containerEl.classList.add('hidden');
+        optionsContainer.classList.remove('hidden');
+        showMessage('');
+    }
+    
+    async function initializeApp() {
+        document.body.classList.add('bg-menu');
+        try {
+            const response = await fetch('themes.json');
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            ALL_THEMES = await response.json();
+            themeRadios.forEach(r => r.addEventListener('change', () => {
+                updateCountOptionsAvailability();
+                setTimeout(updateStartButtonState, 50);
+            }));
+            countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
+            startGameBtn.addEventListener('click', startGame);
+            startBtn.addEventListener('click', hideRandomPicture);
+            reloadBtn.addEventListener('click', startGame);
+            backToMenuBtn.addEventListener('click', goBackToMenu);
+            checkUnlockStatus();
+            updateCountOptionsAvailability();
+            updateStartButtonState();
+        } catch (error) {
+            console.error("Неуспешно зареждане или парсване на themes.json:", error);
+            optionsContainer.innerHTML = `<p style="color: var(--error-color);">Грешка при зареждане на темите. Моля, проверете дали файлът 'themes.json' е наличен и синтактично коректен.</p>`;
+        }
+    }
+
+    initializeApp();
+});
