@@ -180,8 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
-        const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
-        } else {
+             } else {
     opitaiPakAudio.currentTime = 0;
     opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
 
