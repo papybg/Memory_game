@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const controlsEl = document.getElementById('controls');
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
-    const muteBtn = document.getElementById('muteBtn'); // Взимаме новия бутон
+    const muteBtn = document.getElementById('muteBtn');
 
     // --- СЪСТОЯНИЕ НА ИГРАТА ---
     const gameState = {
@@ -32,10 +32,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- АУДИО ---
     const bravoAudio = new Audio('audio/bravo_uily.wav');
-    const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
-    let isMuted = false; // Променлива за състоянието на звука
+    // const opitaiPakAudio = new Audio('audio/opitaj_pak.wav'); // Вече не ни трябва
+    let isMuted = false;
 
     // --- ФУНКЦИИ ---
+
+    // Функция за превръщане на текст в говор
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'bg-BG'; // Задаваме български език
+            window.speechSynthesis.speak(utterance);
+        } else {
+            console.error("Браузърът не поддържа Web Speech API.");
+        }
+    }
+
     function checkUnlockStatus() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
         if (gamesPlayed >= GAMES_TO_UNLOCK) {
@@ -187,14 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
         } else {
-            opitaiPakAudio.currentTime = 0;
-            if (!isMuted) {
-                opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
-            }
-            
             const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
             const randomIndex = Math.floor(Math.random() * tryAgainMessages.length);
             const randomMessage = tryAgainMessages[randomIndex];
+            
+            if (!isMuted) {
+                speakText(randomMessage);
+            }
             
             showMessage(randomMessage, 'error');
         }
@@ -251,7 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
             reloadBtn.addEventListener('click', startGame);
             backToMenuBtn.addEventListener('click', goBackToMenu);
             
-            // Логика за бутона за спиране на звука
             muteBtn.addEventListener('click', () => {
                 isMuted = !isMuted;
                 muteBtn.textContent = isMuted ? '🔊' : '🔇';
