@@ -180,18 +180,19 @@ document.addEventListener('DOMContentLoaded', () => {
             gameState.awaitingChoice = false;
             reloadBtn.classList.remove('hidden');
             startBtn.classList.add('hidden');
-             } else {
-    opitaiPakAudio.currentTime = 0;
-    opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
-
-    // Нашата нова логика за разнообразни съобщения
-    const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
-    const randomIndex = Math.floor(Math.random() * tryAgainMessages.length);
-    const randomMessage = tryAgainMessages[randomIndex];
-    
-    // Подаваме случайното съобщение на функцията showMessage
-    showMessage(randomMessage, 'error');
-}
+        } else {
+            opitaiPakAudio.currentTime = 0;
+            opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
+            
+            // Нашата нова логика за разнообразни съобщения
+            const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
+            const randomIndex = Math.floor(Math.random() * tryAgainMessages.length);
+            const randomMessage = tryAgainMessages[randomIndex];
+            
+            // Подаваме случайното съобщение на функцията showMessage
+            showMessage(randomMessage, 'error');
+        }
+    }
 
     function showMessage(text, type = 'info') {
         messageDisplay.textContent = text;
