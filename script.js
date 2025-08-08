@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const controlsEl = document.getElementById('controls');
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
+    const muteBtn = document.getElementById('muteBtn'); // Взимаме новия бутон
 
     // --- СЪСТОЯНИЕ НА ИГРАТА ---
     const gameState = {
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- АУДИО ---
     const bravoAudio = new Audio('audio/bravo_uily.wav');
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
+    let isMuted = false; // Променлива за състоянието на звука
 
     // --- ФУНКЦИИ ---
     function checkUnlockStatus() {
@@ -162,15 +164,19 @@ document.addEventListener('DOMContentLoaded', () => {
             restoreHiddenImage();
             const playBravo = () => {
                 bravoAudio.currentTime = 0;
-                bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
+                if (!isMuted) {
+                    bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
+                }
             };
             const itemSoundPath = gameState.hiddenItem.sound;
             if (itemSoundPath) {
                 const itemSound = new Audio(itemSoundPath);
-                itemSound.play().catch(err => {
-                    console.error("Грешка при пускане на звук на обект:", err);
-                    playBravo();
-                });
+                if (!isMuted) {
+                    itemSound.play().catch(err => {
+                        console.error("Грешка при пускане на звук на обект:", err);
+                        playBravo();
+                    });
+                }
                 itemSound.onended = playBravo;
             } else {
                 playBravo();
@@ -182,14 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.classList.add('hidden');
         } else {
             opitaiPakAudio.currentTime = 0;
-            opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
+            if (!isMuted) {
+                opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на 'Опитай пак':", err));
+            }
             
-            // Нашата нова логика за разнообразни съобщения
             const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
             const randomIndex = Math.floor(Math.random() * tryAgainMessages.length);
             const randomMessage = tryAgainMessages[randomIndex];
             
-            // Подаваме случайното съобщение на функцията showMessage
             showMessage(randomMessage, 'error');
         }
     }
@@ -244,6 +250,13 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.addEventListener('click', hideRandomPicture);
             reloadBtn.addEventListener('click', startGame);
             backToMenuBtn.addEventListener('click', goBackToMenu);
+            
+            // Логика за бутона за спиране на звука
+            muteBtn.addEventListener('click', () => {
+                isMuted = !isMuted;
+                muteBtn.textContent = isMuted ? '🔊' : '🔇';
+            });
+
             checkUnlockStatus();
             updateCountOptionsAvailability();
             updateStartButtonState();
