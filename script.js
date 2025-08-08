@@ -32,20 +32,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- АУДИО ---
     const bravoAudio = new Audio('audio/bravo_uily.wav');
-    // const opitaiPakAudio = new Audio('audio/opitaj_pak.wav'); // Вече не ни трябва
+    const opitaiPakAudio = new Audio('audio/opitaj_pak.wav'); // Връщаме резервния звук
     let isMuted = false;
 
-    // --- ФУНКЦИИ ---
+    // --- "СЪБУЖДАНЕ" НА WEB SPEECH API ---
+    if ('speechSynthesis' in window) {
+        speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.getVoices();
+        };
+    }
+    // ------------------------------------
 
-    // Функция за превръщане на текст в говор
+
+    // --- ФУНКЦИИ ---
     function speakText(text) {
+        // Проверяваме дали API се поддържа И дали има зареден български глас
         if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'bg-BG'; // Задаваме български език
-            window.speechSynthesis.speak(utterance);
-        } else {
-            console.error("Браузърът не поддържа Web Speech API.");
+            const voices = speechSynthesis.getVoices();
+            const bulgarianVoice = voices.find(voice => voice.lang === 'bg-BG');
+
+            if (bulgarianVoice) {
+                // Ако има български глас, го използваме
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = bulgarianVoice;
+                utterance.lang = 'bg-BG';
+                window.speechSynthesis.speak(utterance);
+                return; // Излизаме от функцията, защото сме успели
+            }
         }
+        
+        // РЕЗЕРВЕН ВАРИАНТ: Ако API не се поддържа ИЛИ няма български глас
+        opitaiPakAudio.currentTime = 0;
+        opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на резервен звук:", err));
     }
 
     function checkUnlockStatus() {
