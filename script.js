@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function speakText(text) {
         if ('speechSynthesis' in window) {
             const voices = speechSynthesis.getVoices();
-            if (voices.length === 0) { 
+            if (voices.length === 0) {
                 opitaiPakAudio.currentTime = 0;
                 opitaiPakAudio.play().catch(err => console.error("Резервен звук (няма гласове):", err));
                 return;
@@ -72,6 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
             birdsThemeLabel.classList.remove('theme-locked', 'disabled-theme');
             birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}. Темата е отключена!`;
             birdsThemeLabel.innerHTML = birdsThemeLabel.innerHTML.replace('🔒', '✔️');
+            
+            // КЛЮЧОВА КОРЕКЦИЯ: Ако сме избрали темата "Птици" преди да е била активна,
+            // трябва ръчно да обновим състоянието на бутона.
+            if (birdsThemeRadio.checked) {
+                updateStartButtonState();
+            }
         } else {
             birdsThemeRadio.disabled = true;
             birdsThemeLabel.classList.add('theme-locked', 'disabled-theme');
@@ -137,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showMenuUI() {
-        document.body.classList.remove('bg-game');
+        document.body.remove('bg-game');
         document.body.classList.add('bg-menu');
         gameTitleEl.innerHTML = 'Познай<br>КАРТИНКАТА!';
         optionsContainer.classList.remove('hidden');
@@ -279,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             themeRadios.forEach(r => r.addEventListener('change', () => {
                 updateCountOptionsAvailability();
-                updateStartButtonState(); // Премахнато е забавянето
+                updateStartButtonState();
             }));
             
             countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
