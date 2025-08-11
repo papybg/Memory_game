@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameTitleEl = document.getElementById('gameTitle');
     const messageDisplay = document.getElementById('gameMessage');
     const startBtn = document.getElementById('start');
-    const reloadBtn = document.getElementById('reload');
     const backToMenuBtn = document.getElementById('backToMenu');
     const allPicsEl = document.getElementById('allPics');
     const gamePicsEl = document.getElementById('gamePics');
     const containerEl = document.getElementById('container');
-    const controlsEl = document.getElementById('controls');
     const birdsThemeRadio = document.getElementById('birdsThemeRadio');
     const birdsThemeLabel = document.getElementById('birdsThemeLabel');
     const muteBtn = document.getElementById('muteBtn');
+    const topControls = document.getElementById('topControls');
+    const startActionContainer = document.getElementById('startActionContainer');
 
     // --- СЪСТОЯНИЕ НА ИГРАТА ---
     const gameState = {
@@ -35,42 +35,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const opitaiPakAudio = new Audio('audio/opitaj_pak.wav');
     let isMuted = false;
 
+    // --- "СЪБУЖДАНЕ" НА WEB SPEECH API ---
+    if ('speechSynthesis' in window) {
+        speechSynthesis.getVoices();
+        speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.getVoices();
+        };
+    }
+
     // --- ФУНКЦИИ ---
     function speakText(text) {
-        if (!('speechSynthesis' in window)) {
-            // Ако API изобщо не се поддържа, пускаме резервния звук веднага.
-            opitaiPakAudio.currentTime = 0;
-            opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на резервен звук:", err));
-            return;
-        }
-
-        const tryToSpeak = () => {
+        if ('speechSynthesis' in window) {
             const voices = speechSynthesis.getVoices();
             const bulgarianVoice = voices.find(voice => voice.lang === 'bg-BG');
-
             if (bulgarianVoice) {
-                // Гласът е намерен, използваме го.
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.voice = bulgarianVoice;
                 utterance.lang = 'bg-BG';
                 window.speechSynthesis.speak(utterance);
-            } else {
-                // Глас не е намерен, дори след зареждане. Пускаме резервния звук.
-                opitaiPakAudio.currentTime = 0;
-                opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на резервен звук:", err));
+                return;
             }
-        };
-
-        // Проверяваме дали списъкът с гласове е вече зареден.
-        if (speechSynthesis.getVoices().length > 0) {
-            // Ако да, действаме веднага.
-            tryToSpeak();
-        } else {
-            // Ако не, изчакваме събитието 'voiceschanged' и тогава действаме.
-            speechSynthesis.onvoiceschanged = tryToSpeak;
         }
+        opitaiPakAudio.currentTime = 0;
+        opitaiPakAudio.play().catch(err => console.error("Грешка при пускане на резервен звук:", err));
     }
-
 
     function checkUnlockStatus() {
         const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
@@ -145,9 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.currentThemeData = ALL_THEMES[selectedTheme];
         gameTitleEl.innerHTML = `Познай<br>${themeDisplayName.toUpperCase()}!`;
         optionsContainer.classList.add('hidden');
-        // Заменихме стария #controls с новите контейнери
-        document.getElementById('topControls')?.classList.remove('hidden'); // Показваме горните бутони, ако съществуват
-        document.getElementById('startActionContainer')?.classList.remove('hidden'); // Показваме големия бутон за старт
+        topControls.classList.remove('hidden');
+        startActionContainer.classList.remove('hidden');
         containerEl.classList.remove('hidden');
         renderGamePics();
         renderAllPics();
@@ -200,35 +187,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const hiddenId = gameState.hiddenItem.id;
         if (chosenId === hiddenId) {
             restoreHiddenImage();
-            const playBravo = () => {
+            const playBravoAndRestart = () => {
                 bravoAudio.currentTime = 0;
                 if (!isMuted) {
                     bravoAudio.play().catch(err => console.error("Грешка при пускане на 'Браво':", err));
                 }
-                 // Когато имаме автоматичен рестарт, този ред може да се махне или да се остави
-                // setTimeout(startGame, 2500); 
+                setTimeout(startGame, 2500); // АВТОМАТИЧЕН РЕСТАРТ
             };
             const itemSoundPath = gameState.hiddenItem.sound;
             if (itemSoundPath) {
                 const itemSound = new Audio(itemSoundPath);
+                itemSound.onended = playBravoAndRestart; // Рестарт след края на звука на предмета
                 if (!isMuted) {
                     itemSound.play().catch(err => {
                         console.error("Грешка при пускане на звук на обект:", err);
-                        playBravo();
+                        playBravoAndRestart(); // Ако звукът на предмета не тръгне, пусни 'Браво' и рестартирай
                     });
+                } else {
+                    playBravoAndRestart(); // Ако звукът е спрян, просто пусни "Браво" (което е тихо) и рестартирай
                 }
-                itemSound.onended = playBravo;
             } else {
-                playBravo();
+                playBravoAndRestart(); // Ако няма звук на предмет, пусни "Браво" и рестартирай
             }
             showMessage('Браво!', 'success');
             incrementGamesPlayed();
             gameState.awaitingChoice = false;
-            // Тук може да добавим автоматичен рестарт, ако го искаме
-             if(document.getElementById('reload')) { // Проверка дали старият бутон съществува
-                document.getElementById('reload').classList.remove('hidden');
-             }
-            startBtn.classList.add('hidden');
         } else {
             const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
             const randomIndex = Math.floor(Math.random() * tryAgainMessages.length);
@@ -263,17 +246,14 @@ document.addEventListener('DOMContentLoaded', () => {
         gameState.hiddenItem = null;
         showMessage('Натисни "СКРИЙ КАРТИНА" за да започнеш.');
         startBtn.classList.remove('hidden');
-        if(document.getElementById('reload')) {
-            document.getElementById('reload').classList.add('hidden');
-        }
     }
 
     function goBackToMenu() {
         document.body.classList.remove('bg-game');
         document.body.classList.add('bg-menu');
         gameTitleEl.innerHTML = 'Познай<br>КАРТИНКАТА!';
-        document.getElementById('topControls')?.classList.add('hidden');
-        document.getElementById('startActionContainer')?.classList.add('hidden');
+        topControls.classList.add('hidden');
+        startActionContainer.classList.add('hidden');
         containerEl.classList.add('hidden');
         optionsContainer.classList.remove('hidden');
         messageDisplay.classList.remove('message-animate');
@@ -282,6 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     async function initializeApp() {
         document.body.classList.add('bg-menu');
+        topControls.classList.add('hidden');
         try {
             const response = await fetch('themes.json');
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -293,9 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
             countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
             startGameBtn.addEventListener('click', startGame);
             startBtn.addEventListener('click', hideRandomPicture);
-            if(document.getElementById('reload')) {
-                document.getElementById('reload').addEventListener('click', startGame);
-            }
             backToMenuBtn.addEventListener('click', goBackToMenu);
             
             muteBtn.addEventListener('click', () => {
