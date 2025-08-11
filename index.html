@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Познай КАРТИНКАТА!</title>
-    <link rel="stylesheet" href="style.css?v=1.97">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <link rel="icon" type="image/png" href="images/icon.png">
 </head>
 <body>
-    
+
+    <div id="topControls">
+        <button id="backToMenu" class="game-btn top-btn">🏠</button>
+        <button id="muteBtn" class="game-btn top-btn">🔇</button>
+    </div>
+
     <h1 id="gameTitle">Познай<br>КАРТИНКАТА!</h1>
 
     <div id="optionsContainer">
@@ -31,23 +36,20 @@
                 <label><input type="radio" name="count" value="5"> 5</label>
             </div>
         </fieldset>
-        <button id="startGameBtn" disabled class="option-line-3 game-btn">Започни играта</button> 
+        <button id="startGameBtn" disabled class="option-line-3 game-btn">Започни играта</button>
     </div>
 
    <div id="gameMessage" class="gameMessage message-hidden"></div>
 
-    <div id="controls" class="hidden">
-    <button id="start" class="game-btn">СКРИЙ КАРТИНА</button>
-    <button id="reload" class="game-btn hidden">НОВА ИГРА</button>
-    <button id="backToMenu" class="game-btn">ОБРАТНО В МЕНЮТО</button>
-    <button id="muteBtn" class="game-btn">🔇</button>
-    </div>
+   <div id="startActionContainer" class="hidden">
+       <button id="start" class="game-btn big-start-btn">СКРИЙ КАРТИНА</button>
+   </div>
 
     <div id="container" class="hidden">
         <div id="gamePics" class="game-section"></div>
         <div id="allPics" class="game-section"></div>
     </div>
 
-    <script src="script.js?v=1.97"></script>
+    <script src="script.js?v=2.0"></script>
 </body>
 </html>
