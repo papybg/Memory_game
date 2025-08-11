@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- КОНФИГУРАЦИЯ ---
-    const GAMES_TO_UNLOCK = 15;
+    // const GAMES_TO_UNLOCK = 15; // ВЕЧЕ НЕ Е НУЖНО
     let ALL_THEMES = {};
 
     // --- DOM ЕЛЕМЕНТИ ---
@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const allPicsEl = document.getElementById('allPics');
     const gamePicsEl = document.getElementById('gamePics');
     const containerEl = document.getElementById('container');
-    const birdsThemeRadio = document.getElementById('birdsThemeRadio');
-    const birdsThemeLabel = document.getElementById('birdsThemeLabel');
     const muteBtn = document.getElementById('muteBtn');
     const topControls = document.getElementById('topControls');
     const startActionContainer = document.getElementById('startActionContainer');
@@ -47,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function speakText(text) {
         if ('speechSynthesis' in window) {
             const voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
+            if (voices.length === 0) { 
                 opitaiPakAudio.currentTime = 0;
                 opitaiPakAudio.play().catch(err => console.error("Резервен звук (няма гласове):", err));
                 return;
@@ -65,37 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
         opitaiPakAudio.play().catch(err => console.error("Резервен звук:", err));
     }
 
-    function checkUnlockStatus() {
-        const gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
-        if (gamesPlayed >= GAMES_TO_UNLOCK) {
-            birdsThemeRadio.disabled = false;
-            birdsThemeLabel.classList.remove('theme-locked', 'disabled-theme');
-            birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}. Темата е отключена!`;
-            birdsThemeLabel.innerHTML = birdsThemeLabel.innerHTML.replace('🔒', '✔️');
-            
-            // КЛЮЧОВА КОРЕКЦИЯ: Ако сме избрали темата "Птици" преди да е била активна,
-            // трябва ръчно да обновим състоянието на бутона.
-            if (birdsThemeRadio.checked) {
-                updateStartButtonState();
-            }
-        } else {
-            birdsThemeRadio.disabled = true;
-            birdsThemeLabel.classList.add('theme-locked', 'disabled-theme');
-            birdsThemeLabel.title = `Изиграни игри: ${gamesPlayed}/${GAMES_TO_UNLOCK}. Нужни са още ${GAMES_TO_UNLOCK - gamesPlayed}.`;
-        }
-    }
+    // Функцията checkUnlockStatus() вече не е нужна и се премахва
 
-    function incrementGamesPlayed() {
-        let gamesPlayed = parseInt(localStorage.getItem('gamesPlayedCount')) || 0;
-        if (gamesPlayed < GAMES_TO_UNLOCK) {
-            gamesPlayed++;
-            localStorage.setItem('gamesPlayedCount', gamesPlayed);
-            checkUnlockStatus();
-            if (gamesPlayed === GAMES_TO_UNLOCK) {
-                alert('Поздравления! Отключи нова тема: Птици!');
-            }
-        }
-    }
+    // Функцията incrementGamesPlayed() вече не е нужна и се премахва
 
     function shuffleArray(array) {
         let currentIndex = array.length, randomIndex;
@@ -154,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGame() {
-        document.body.classList.remove('bg-menu');
+        document.body.remove('bg-menu');
         document.body.classList.add('bg-game');
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
         const themeLabel = document.querySelector(`input[value="${selectedTheme}"]`).closest('label');
@@ -227,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             showMessage('Браво!', 'success');
-            incrementGamesPlayed();
+            // incrementGamesPlayed(); // ВЕЧЕ НЕ Е НУЖНО
 
             const itemSoundPath = gameState.hiddenItem.sound;
             if (itemSoundPath && !isMuted) {
@@ -299,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 muteBtn.querySelector('.icon-muted').classList.toggle('hidden', !isMuted);
             });
 
-            checkUnlockStatus();
+            // checkUnlockStatus(); // ВЕЧЕ НЕ Е НУЖНО
             updateCountOptionsAvailability();
             updateStartButtonState();
         } catch (error) {
