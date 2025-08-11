@@ -34,12 +34,19 @@ body {
 }
 
 .top-btn {
-    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 10px;
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    line-height: 1;
+}
+
+.top-btn svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
 }
 
 #startActionContainer {
@@ -128,5 +135,6 @@ body {
     #gameTitle { font-size: 2.5rem; }
     #gamePics img { width: 80px; height: 80px; } 
     #allPics img { width: 60px; height: 60px; }
-    .top-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+    .top-btn { width: 40px; height: 40px; }
+    .top-btn svg { width: 22px; height: 22px; }
 }
