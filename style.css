@@ -126,8 +126,8 @@ body {
 #optionsContainer h2 { font-size: 1.8rem; color: var(--text-color-dark); margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
 
 #themeOptions label, #countOptions label { display: inline-block; margin: 5px 10px; cursor: pointer; font-weight: bold; }
+/* .theme-locked вече не е нужно */
 .disabled-theme { color: #999; cursor: not-allowed; text-decoration: line-through; }
-.theme-locked { color: #999; cursor: not-allowed; }
 
 .hidden { display: none !important; }
 
