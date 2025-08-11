@@ -26,6 +26,36 @@ body {
     background-color: var(--background-light); /* Резервен цвят */
 }
 
+/* --- НОВИ СТИЛОВЕ ЗА КОНТРОЛИТЕ --- */
+#topControls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.top-btn {
+    font-size: 1.5rem; /* По-големи икони */
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    line-height: 1;
+}
+
+#startActionContainer {
+    margin: 15px 0;
+}
+
+.big-start-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    transform: scale(1.1); /* Малко по-голям по подразбиране */
+    border-radius: 15px;
+}
+/* ------------------------------------- */
+
 .bg-menu { background-image: url('images/fon1.jpg'); background-size: cover; background-position: center; background-attachment: fixed; }
 .bg-game { background-image: linear-gradient(to bottom left, #d2f8d2, #a6e7ff); }
 
@@ -38,7 +68,6 @@ body {
     text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
 }
 
-/* --- ТУК Е КОРЕКЦИЯТА --- */
 #gameMessage {
     margin-bottom: 15px;
     font-size: 1.5rem;
@@ -51,31 +80,24 @@ body {
     padding: 12px 20px;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* display, opacity и transform са премахнати оттук */
 }
 
-/* Нов клас за скриване */
 .message-hidden {
     display: none !important;
     opacity: 0;
 }
 
 .message-animate {
-    display: inline-block; /* Показваме елемента */
+    display: inline-block;
     opacity: 1;
     transform: scale(1);
 }
-/* -------------------------- */
 
 .message-success { color: var(--success-color); }
 .message-error { color: var(--error-color); }
 
-#controls { margin-bottom: 15px; }
-
 .game-btn {
-    padding: 12px 24px;
     margin: 5px;
-    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     color: white;
@@ -89,9 +111,6 @@ body {
 .game-btn:hover, .game-btn:focus { background-position: right center; box-shadow: 0 8px 20px rgba(221, 36, 118, 0.5); transform: translateY(-3px); outline: none; }
 .game-btn:disabled { background-image: none; background-color: var(--disabled-button-color); box-shadow: none; transform: none; cursor: not-allowed; }
 
-#start::before { content: '🎩 '; }
-#reload::before { content: '✨ '; }
-#backToMenu::before { content: '🏠 '; }
 #startGameBtn::before { content: '🚀 '; }
 
 #container { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; max-width: 900px; margin: 10px auto; }
@@ -140,4 +159,5 @@ body {
     #gameTitle { font-size: 2.5rem; }
     #gamePics img { width: 80px; height: 80px; } 
     #allPics img { width: 60px; height: 60px; }
+    .top-btn { width: 40px; height: 40px; font-size: 1.2rem; }
 }
