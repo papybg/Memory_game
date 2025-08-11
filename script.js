@@ -45,23 +45,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ФУНКЦИИ ---
     function speakText(text) {
-        if ('speechSynthesis' in window) {
-            const voices = speechSynthesis.getVoices();
-            // Понякога списъкът е празен при първо извикване, дори след "събуждането"
-            if (voices.length === 0) { 
-                opitaiPakAudio.currentTime = 0;
-                opitaiPakAudio.play().catch(err => console.error("Резервен звук (няма гласове):", err));
-                return;
-            }
-            const bulgarianVoice = voices.find(voice => voice.lang === 'bg-BG');
-            if (bulgarianVoice) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.voice = bulgarianVoice;
-                utterance.lang = 'bg-BG';
-                window.speechSynthesis.speak(utterance);
-                return;
-            }
+    if ('speechSynthesis' in window) {
+        const voices = speechSynthesis.getVoices();
+        
+        // Търсим английски (US) глас, вместо български
+        const englishVoice = voices.find(voice => voice.lang === 'en-US');
+
+        if (englishVoice) {
+            // Ако е намерен английски глас, го използваме
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = englishVoice;
+            utterance.lang = 'en-US'; // Подаваме английски език
+            window.speechSynthesis.speak(utterance);
+            return; 
         }
+    }
+    
+    // Ако не намерим английски глас, пак ще се пусне резервният звук
+    opitaiPakAudio.currentTime = 0;
+    opitaiPakAudio.play().catch(err => console.error("Резервен звук:", err));
+}
         // Ако API не се поддържа ИЛИ няма български глас, пускаме резервния звук
         opitaiPakAudio.currentTime = 0;
         opitaiPakAudio.play().catch(err => console.error("Резервен звук:", err));
@@ -237,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 playBravoAndRestart();
             }
         } else {
-            const tryAgainMessages = ['Опитай пак!', 'Сигурен ли си?', 'Почти позна!'];
+            const tryAgainMessages = ['Try again!', 'Are you sure?', 'Almost!'];
             const randomIndex = Math.floor(Math.random() * tryAgainMessages.length);
             const randomMessage = tryAgainMessages[randomIndex];
             
