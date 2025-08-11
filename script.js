@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- КОНФИГУРАЦИЯ ---
-    // const GAMES_TO_UNLOCK = 15; // ВЕЧЕ НЕ Е НУЖНО
     let ALL_THEMES = {};
 
     // --- DOM ЕЛЕМЕНТИ ---
@@ -35,9 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- "СЪБУЖДАНЕ" НА WEB SPEECH API ---
     if ('speechSynthesis' in window) {
-        speechSynthesis.getVoices();
+        speechSynthesis.getVoices(); // Първоначално извикване
         speechSynthesis.onvoiceschanged = () => {
-            speechSynthesis.getVoices();
+            speechSynthesis.getVoices(); // Повторно при промяна
         };
     }
 
@@ -45,34 +44,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function speakText(text) {
         if ('speechSynthesis' in window) {
             const voices = speechSynthesis.getVoices();
-            if (voices.length === 0) { 
-                opitaiPakAudio.currentTime = 0;
-                opitaiPakAudio.play().catch(err => console.error("Резервен звук (няма гласове):", err));
-                return;
-            }
-            const bulgarianVoice = voices.find(voice => voice.lang === 'bg-BG');
-            if (bulgarianVoice) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.voice = bulgarianVoice;
-                utterance.lang = 'bg-BG';
-                window.speechSynthesis.speak(utterance);
-                return;
+            if (voices.length > 0) {
+                const bulgarianVoice = voices.find(voice => voice.lang === 'bg-BG');
+                if (bulgarianVoice) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.voice = bulgarianVoice;
+                    utterance.lang = 'bg-BG';
+                    window.speechSynthesis.speak(utterance);
+                    return; // Успех, излизаме
+                }
             }
         }
+        // Ако нещо от горното не успее, пускаме резервния звук
         opitaiPakAudio.currentTime = 0;
         opitaiPakAudio.play().catch(err => console.error("Резервен звук:", err));
     }
 
-    // Функцията checkUnlockStatus() вече не е нужна и се премахва
-
-    // Функцията incrementGamesPlayed() вече не е нужна и се премахва
-
     function shuffleArray(array) {
-        let currentIndex = array.length, randomIndex;
-        while (currentIndex !== 0) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
     }
@@ -83,13 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxPicsInTheme = ALL_THEMES[selectedThemeKey].length;
         countRadios.forEach(radio => {
             const label = radio.closest('label');
-            if (parseInt(radio.value) > maxPicsInTheme) {
-                radio.disabled = true;
-                if(label) label.classList.add('disabled-theme');
-            } else {
-                radio.disabled = false;
-                if(label) label.classList.remove('disabled-theme');
-            }
+            const shouldDisable = parseInt(radio.value) > maxPicsInTheme;
+            radio.disabled = shouldDisable;
+            label.classList.toggle('disabled-theme', shouldDisable);
         });
         const currentSelectedCount = document.querySelector('input[name="count"]:checked');
         if (currentSelectedCount && currentSelectedCount.disabled) {
@@ -113,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showMenuUI() {
-        document.body.remove('bg-game');
+        document.body.classList.remove('bg-game');
         document.body.classList.add('bg-menu');
         gameTitleEl.innerHTML = 'Познай<br>КАРТИНКАТА!';
         optionsContainer.classList.remove('hidden');
@@ -124,11 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGame() {
-        document.body.remove('bg-menu');
+        document.body.classList.remove('bg-menu');
         document.body.classList.add('bg-game');
         const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
         const themeLabel = document.querySelector(`input[value="${selectedTheme}"]`).closest('label');
-        const themeDisplayName = themeLabel.textContent.replace(/🔒|✔️/g, '').trim();
+        const themeDisplayName = themeLabel.textContent.trim();
         gameState.numberOfPics = parseInt(document.querySelector('input[name="count"]:checked').value);
         gameState.currentThemeData = ALL_THEMES[selectedTheme];
         gameTitleEl.innerHTML = `Познай<br>${themeDisplayName.toUpperCase()}!`;
@@ -142,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderAllPics() {
         allPicsEl.innerHTML = '';
-        gameState.currentThemeData.forEach(item => {
+        shuffleArray(gameState.currentThemeData).forEach(item => { // Разбъркваме всички, за да е по-интересно
             const img = document.createElement('img');
             img.src = item.image;
             img.dataset.id = item.id;
@@ -154,8 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderGamePics() {
         gamePicsEl.innerHTML = '';
-        const shuffledItems = shuffleArray([...gameState.currentThemeData]);
-        gameState.selectedGameItems = shuffledItems.slice(0, gameState.numberOfPics);
+        gameState.selectedGameItems = shuffleArray([...gameState.currentThemeData]).slice(0, gameState.numberOfPics);
         gameState.selectedGameItems.forEach((item) => {
             const img = document.createElement('img');
             img.src = item.image;
@@ -168,10 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideRandomPicture() {
         if (gameState.awaitingChoice) return;
         restoreHiddenImage();
-        const hiddenIndex = Math.floor(Math.random() * gameState.numberOfPics);
-        const allGameImages = gamePicsEl.querySelectorAll('img');
-        if (allGameImages.length === 0) return;
-        const hiddenImageElement = allGameImages[hiddenIndex];
+        const hiddenIndex = Math.floor(Math.random() * gameState.selectedGameItems.length);
+        const hiddenImageElement = gamePicsEl.children[hiddenIndex];
         gameState.hiddenItem = gameState.selectedGameItems[hiddenIndex];
         gameState.hiddenItem.element = hiddenImageElement;
         hiddenImageElement.src = 'images/hide.png';
@@ -197,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             showMessage('Браво!', 'success');
-            // incrementGamesPlayed(); // ВЕЧЕ НЕ Е НУЖНО
 
             const itemSoundPath = gameState.hiddenItem.sound;
             if (itemSoundPath && !isMuted) {
@@ -226,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function showMessage(text, type = 'info') {
         messageDisplay.textContent = text;
         messageDisplay.classList.remove('message-hidden', 'message-success', 'message-error');
-        messageDisplay.classList.add(`message-${type}`);
         messageDisplay.classList.add('message-animate');
     }
 
@@ -253,12 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             ALL_THEMES = await response.json();
             
-            themeRadios.forEach(r => r.addEventListener('change', () => {
-                updateCountOptionsAvailability();
+            const allRadios = document.querySelectorAll('#optionsContainer input[type="radio"]');
+            allRadios.forEach(radio => radio.addEventListener('change', () => {
+                if (radio.name === 'theme') {
+                    updateCountOptionsAvailability();
+                }
                 updateStartButtonState();
             }));
-            
-            countRadios.forEach(r => r.addEventListener('change', updateStartButtonState));
+
             startGameBtn.addEventListener('click', startGame);
             startBtn.addEventListener('click', hideRandomPicture);
             backToMenuBtn.addEventListener('click', showMenuUI);
@@ -268,8 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 muteBtn.querySelector('.icon-unmuted').classList.toggle('hidden', isMuted);
                 muteBtn.querySelector('.icon-muted').classList.toggle('hidden', !isMuted);
             });
-
-            // checkUnlockStatus(); // ВЕЧЕ НЕ Е НУЖНО
+            
             updateCountOptionsAvailability();
             updateStartButtonState();
         } catch (error) {
